@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>হেল্প ডেস্ক</title>
+  <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'SolaimanLipi', sans-serif;
+      background: #e3f2fd;
+      margin: 0;
+      padding: 0;
+    }
+    .chat-container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+    .messages {
+      height: 400px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .message {
+      background: #dcedc8;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin: 5px 0;
+    }
+    .message.bot {
+      background: #fff9c4;
+    }
+    .input-area {
+      display: flex;
+    }
+    input {
+      flex: 1;
+      padding: 10px;
+      font-family: 'SolaimanLipi';
+      border-radius: 5px 0 0 5px;
+      border: 1px solid #999;
+    }
+    button {
+      padding: 10px;
+      background: #00796b;
+      color: white;
+      border: none;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-container">
+  <h2>হেল্প ডেস্ক চ্যাট</h2>
+  <div class="messages" id="messages"></div>
+  <div class="input-area">
+    <input type="text" id="userInput" placeholder="আপনার প্রশ্ন লিখুন...">
+    <button onclick="sendMessage()">পাঠান</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "SENDER_ID",
+    appId: "APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  let chatId = localStorage.getItem('chatId');
+  if (!chatId) {
+    chatId = 'chat_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+    localStorage.setItem('chatId', chatId);
+  }
+
+  const messagesDiv = document.getElementById('messages');
+
+  function sendMessage() {
+    const input = document.getElementById('userInput');
+    const text = input.value.trim();
+    if (text) {
+      db.ref('messages/' + chatId).push({
+        sender: 'user',
+        text: text,
+        timestamp: Date.now()
+      });
+      input.value = '';
+    }
+  }
+
+  db.ref('messages/' + chatId).on('child_added', snapshot => {
+    const msg = snapshot.val();
+    const div = document.createElement('div');
+    div.className = 'message';
+    if (msg.sender === 'bot') div.classList.add('bot');
+    div.textContent = msg.text;
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  });
+</script>
+
+</body>
+</html>
