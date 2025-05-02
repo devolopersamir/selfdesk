@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,102 +8,111 @@
   <style>
     body {
       font-family: 'SolaimanLipi', sans-serif;
-      background: #f3f4f6;
+      background: #f4f6f9;
       margin: 0;
-      padding: 0;
       display: flex;
       flex-direction: column;
       height: 100vh;
     }
     .top-bar {
-      padding: 15px;
-      background-color: #2e7d32;
+      background-color: #388e3c;
       color: white;
       text-align: center;
-      font-size: 20px;
+      font-size: 24px;
+      padding: 12px;
+      border-radius: 8px 8px 0 0;
     }
     .container {
       display: flex;
       flex: 1;
     }
     .sidebar {
-      width: 200px;
-      background: #c8e6c9;
+      width: 240px;
+      background-color: #81c784;
+      padding: 20px;
       overflow-y: auto;
-      padding: 10px;
-      border-right: 1px solid #aaa;
+      border-right: 1px solid #ccc;
+      box-shadow: 2px 0px 5px rgba(0,0,0,0.1);
     }
     .chat-area {
       flex: 1;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      padding: 20px;
+      background: #ffffff;
     }
     .chat-status {
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
     .messages {
       flex: 1;
-      background: #fff;
-      padding: 10px;
-      border-radius: 10px;
+      background: #f1f8e9;
+      padding: 15px;
+      border-radius: 8px;
       overflow-y: auto;
-      border: 1px solid #ccc;
       margin-bottom: 10px;
+      border: 1px solid #ccc;
+      box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.1);
     }
     .message {
-      padding: 6px 10px;
-      margin: 5px 0;
-      border-radius: 8px;
-      max-width: 80%;
+      padding: 8px 12px;
+      margin: 6px 0;
+      border-radius: 10px;
+      max-width: 75%;
+      word-wrap: break-word;
     }
     .user {
-      background: #ffe082;
+      background: #ffee58;
       align-self: flex-start;
     }
     .admin {
-      background: #b39ddb;
+      background: #90caf9;
       align-self: flex-end;
       text-align: right;
     }
     .input-group {
       display: flex;
-      gap: 10px;
+      gap: 12px;
+      margin-top: 10px;
     }
     .input-group input {
       flex: 1;
       padding: 10px;
-      border-radius: 8px;
+      border-radius: 10px;
       border: 1px solid #aaa;
     }
     .input-group button {
-      padding: 10px 16px;
-      background: #388e3c;
+      padding: 12px 16px;
+      background-color: #388e3c;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .user-item {
+      padding: 12px;
+      margin-bottom: 10px;
+      background: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .user-item:hover {
+      background: #c8e6c9;
+    }
+    .user-item.active {
+      background: #aed581;
+    }
+    .chat-status button {
+      padding: 12px 18px;
+      background-color: #388e3c;
       color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
     }
-    .chat-status button {
-      padding: 8px 14px;
-      border: none;
-      border-radius: 6px;
-      background-color: #2e7d32;
-      color: white;
-      cursor: pointer;
-    }
     .closed {
-      background-color: #c62828 !important;
-    }
-    .user-item {
-      padding: 8px;
-      background: white;
-      margin-bottom: 6px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .user-item.active {
-      background: #aed581;
+      background-color: #d32f2f !important;
     }
   </style>
 </head>
@@ -120,7 +130,11 @@
         <button onclick="sendAdminMessage()">পাঠান</button>
       </div>
     </div>
-  </div>  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>  <script>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDW5KNgIHbkqoO3qFa-o5vFfh7niey5w1Y",
       authDomain: "selfsms-eb6be.firebaseapp.com",
@@ -198,5 +212,6 @@
     };
 
     loadUserList();
-  </script></body>
+  </script>
+</body>
 </html>
