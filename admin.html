@@ -1,88 +1,50 @@
-<!DOCTYPE html>
-<html lang="bn">
+<!DOCTYPE html><html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <title>অ্যাডমিন প্যানেল</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>অ্যাডমিন প্যানেল</title>
   <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet">
   <style>
     body {
       font-family: 'SolaimanLipi', sans-serif;
-      background: #fff8e1;
-      padding: 10px;
+      background: #f3f4f6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
       margin: 0;
     }
-    .chat-container {
-      max-width: 700px;
-      margin: auto;
-      background: white;
-      padding: 20px;
+    .panel {
+      background: #fff;
+      padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
     }
-    select, input, button {
-      font-family: 'SolaimanLipi';
-    }
-    select {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-    }
-    .messages {
-      height: 300px;
-      overflow-y: auto;
-      background: #f1f8e9;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-    .message {
-      margin: 5px 0;
-      padding: 10px;
-      border-radius: 8px;
-      line-height: 1.5;
-    }
-    .user { background: #fff59d; text-align: left; }
-    .bot { background: #b2dfdb; text-align: right; }
-    .input-group {
-      display: flex;
-      gap: 8px;
-    }
-    input {
-      flex: 1;
-      padding: 10px;
-      border-radius: 8px;
+    h2 {
+      color: #2e7d32;
+      margin-bottom: 20px;
     }
     button {
-      padding: 10px 20px;
+      padding: 12px 20px;
+      font-size: 16px;
       border: none;
       border-radius: 8px;
-      background-color: #ff7043;
+      background-color: #388e3c;
       color: white;
-      font-weight: bold;
       cursor: pointer;
     }
-    @media (max-width: 600px) {
-      .chat-container { padding: 10px; }
+    .closed {
+      background-color: #c62828 !important;
     }
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <h2>অ্যাডমিন প্যানেল</h2>
-    <select id="chatList"></select>
-    <div class="messages" id="adminMessages"></div>
-    <div class="input-group">
-      <input type="text" id="adminInput" placeholder="উত্তর লিখুন...">
-      <button onclick="sendReply()">পাঠান</button>
-    </div>
-  </div>
-
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-  <script>
+  <div class="panel">
+    <h2>অ্যাডমিন: চ্যাট স্ট্যাটাস</h2>
+    <button id="toggleBtn">লোড হচ্ছে...</button>
+  </div>  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDW5KNgIHbkqoO3qFa-o5vFfh7niey5w1Y",
       authDomain: "selfsms-eb6be.firebaseapp.com",
@@ -95,42 +57,24 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const chatList = document.getElementById("chatList");
-    const adminMessages = document.getElementById("adminMessages");
-    let currentChat = null;
+    const btn = document.getElementById("toggleBtn");
 
-    db.ref("messages").on("value", snapshot => {
-      chatList.innerHTML = "<option disabled selected>চ্যাট নির্বাচন করুন</option>";
-      snapshot.forEach(child => {
-        const opt = document.createElement("option");
-        opt.value = child.key;
-        opt.text = child.key;
-        chatList.appendChild(opt);
-      });
-    });
-
-    chatList.addEventListener("change", () => {
-      currentChat = chatList.value;
-      adminMessages.innerHTML = "";
-      db.ref("messages/" + currentChat).off();
-      db.ref("messages/" + currentChat).on("child_added", snap => {
-        const msg = snap.val();
-        const div = document.createElement("div");
-        div.className = "message " + msg.sender;
-        div.textContent = msg.text;
-        adminMessages.appendChild(div);
-        adminMessages.scrollTop = adminMessages.scrollHeight;
-      });
-    });
-
-    function sendReply() {
-      const input = document.getElementById("adminInput");
-      const text = input.value.trim();
-      if (text && currentChat) {
-        db.ref("messages/" + currentChat).push({ sender: "bot", text: text });
-        input.value = "";
+    db.ref("chat_status").on("value", snap => {
+      const status = snap.val();
+      if (status === "open") {
+        btn.textContent = "চ্যাট বন্ধ করুন";
+        btn.classList.remove("closed");
+      } else {
+        btn.textContent = "চ্যাট চালু করুন";
+        btn.classList.add("closed");
       }
-    }
-  </script>
-</body>
+    });
+
+    btn.addEventListener("click", () => {
+      db.ref("chat_status").once("value").then(snap => {
+        const current = snap.val();
+        db.ref("chat_status").set(current === "open" ? "closed" : "open");
+      });
+    });
+  </script></body>
 </html>
