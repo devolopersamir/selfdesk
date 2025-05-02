@@ -8,42 +8,118 @@
     body {
       font-family: 'SolaimanLipi', sans-serif;
       background: #f3f4f6;
+      margin: 0;
+      padding: 0;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
       height: 100vh;
-      margin: 0;
     }
-    .panel {
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    .top-bar {
+      padding: 15px;
+      background-color: #2e7d32;
+      color: white;
       text-align: center;
+      font-size: 20px;
     }
-    h2 {
-      color: #2e7d32;
-      margin-bottom: 20px;
+    .container {
+      display: flex;
+      flex: 1;
     }
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
+    .sidebar {
+      width: 200px;
+      background: #c8e6c9;
+      overflow-y: auto;
+      padding: 10px;
+      border-right: 1px solid #aaa;
+    }
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    .chat-status {
+      margin-bottom: 10px;
+    }
+    .messages {
+      flex: 1;
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+    .message {
+      padding: 6px 10px;
+      margin: 5px 0;
+      border-radius: 8px;
+      max-width: 80%;
+    }
+    .user {
+      background: #ffe082;
+      align-self: flex-start;
+    }
+    .admin {
+      background: #b39ddb;
+      align-self: flex-end;
+      text-align: right;
+    }
+    .input-group {
+      display: flex;
+      gap: 10px;
+    }
+    .input-group input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+    }
+    .input-group button {
+      padding: 10px 16px;
+      background: #388e3c;
+      color: white;
       border: none;
       border-radius: 8px;
-      background-color: #388e3c;
+      cursor: pointer;
+    }
+    .chat-status button {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      background-color: #2e7d32;
       color: white;
       cursor: pointer;
     }
     .closed {
       background-color: #c62828 !important;
     }
+    .user-item {
+      padding: 8px;
+      background: white;
+      margin-bottom: 6px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .user-item.active {
+      background: #aed581;
+    }
   </style>
 </head>
 <body>
-  <div class="panel">
-    <h2>অ্যাডমিন: চ্যাট স্ট্যাটাস</h2>
-    <button id="toggleBtn">লোড হচ্ছে...</button>
+  <div class="top-bar">অ্যাডমিন প্যানেল</div>
+  <div class="container">
+    <div class="sidebar" id="userList">লোড হচ্ছে...</div>
+    <div class="chat-area">
+      <div class="chat-status">
+        <button id="toggleBtn">চ্যাট স্ট্যাটাস লোড হচ্ছে...</button>
+      </div>
+      <div class="messages" id="messages"></div>
+      <div class="input-group">
+        <input type="text" id="adminInput" placeholder="ম্যাসেজ লিখুন...">
+        <button onclick="sendAdminMessage()">পাঠান</button>
+      </div>
+    </div>
   </div>  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDW5KNgIHbkqoO3qFa-o5vFfh7niey5w1Y",
@@ -57,24 +133,70 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const btn = document.getElementById("toggleBtn");
+    const userList = document.getElementById("userList");
+    const messagesDiv = document.getElementById("messages");
+    const input = document.getElementById("adminInput");
+    const toggleBtn = document.getElementById("toggleBtn");
+
+    let selectedUser = null;
+
+    function loadUserList() {
+      db.ref("messages").once("value", snap => {
+        const users = snap.val();
+        userList.innerHTML = "";
+        for (const user in users) {
+          const div = document.createElement("div");
+          div.textContent = user;
+          div.className = "user-item";
+          div.onclick = () => selectUser(user, div);
+          userList.appendChild(div);
+        }
+      });
+    }
+
+    function selectUser(userId, element) {
+      selectedUser = userId;
+      [...userList.children].forEach(el => el.classList.remove("active"));
+      element.classList.add("active");
+      messagesDiv.innerHTML = "";
+
+      db.ref("messages/" + userId).off();
+      db.ref("messages/" + userId).on("child_added", snap => {
+        const msg = snap.val();
+        const div = document.createElement("div");
+        div.className = "message " + (msg.sender === "user" ? "user" : "admin");
+        div.textContent = msg.text;
+        messagesDiv.appendChild(div);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      });
+    }
+
+    function sendAdminMessage() {
+      const text = input.value.trim();
+      if (text && selectedUser) {
+        db.ref("messages/" + selectedUser).push({ sender: "admin", text });
+        input.value = "";
+      }
+    }
 
     db.ref("chat_status").on("value", snap => {
       const status = snap.val();
       if (status === "open") {
-        btn.textContent = "চ্যাট বন্ধ করুন";
-        btn.classList.remove("closed");
+        toggleBtn.textContent = "চ্যাট বন্ধ করুন";
+        toggleBtn.classList.remove("closed");
       } else {
-        btn.textContent = "চ্যাট চালু করুন";
-        btn.classList.add("closed");
+        toggleBtn.textContent = "চ্যাট চালু করুন";
+        toggleBtn.classList.add("closed");
       }
     });
 
-    btn.addEventListener("click", () => {
+    toggleBtn.onclick = () => {
       db.ref("chat_status").once("value").then(snap => {
-        const current = snap.val();
-        db.ref("chat_status").set(current === "open" ? "closed" : "open");
+        const status = snap.val();
+        db.ref("chat_status").set(status === "open" ? "closed" : "open");
       });
-    });
+    };
+
+    loadUserList();
   </script></body>
 </html>
