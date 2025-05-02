@@ -2,50 +2,82 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <title>অ্যাডমিন</title>
+  <title>অ্যাডমিন প্যানেল</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet">
   <style>
     body {
       font-family: 'SolaimanLipi', sans-serif;
-      background: #fff3e0;
-      padding: 20px;
+      background: #fff8e1;
+      padding: 10px;
+      margin: 0;
     }
     .chat-container {
       max-width: 700px;
       margin: auto;
       background: white;
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    select, input, button {
+      font-family: 'SolaimanLipi';
+    }
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
     }
     .messages {
       height: 300px;
-      overflow-y: scroll;
+      overflow-y: auto;
+      background: #f1f8e9;
+      border-radius: 8px;
       border: 1px solid #ccc;
       padding: 10px;
       margin-bottom: 10px;
     }
     .message {
       margin: 5px 0;
-      padding: 8px;
-      border-radius: 5px;
-      background: #dcedc8;
-    }
-    .message.user {
-      background: #ffe082;
-    }
-    input, button, select {
       padding: 10px;
-      font-family: 'SolaimanLipi';
+      border-radius: 8px;
+      line-height: 1.5;
+    }
+    .user { background: #fff59d; text-align: left; }
+    .bot { background: #b2dfdb; text-align: right; }
+    .input-group {
+      display: flex;
+      gap: 8px;
+    }
+    input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff7043;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    @media (max-width: 600px) {
+      .chat-container { padding: 10px; }
     }
   </style>
 </head>
 <body>
   <div class="chat-container">
-    <h2>অ্যাডমিন চ্যাট</h2>
+    <h2>অ্যাডমিন প্যানেল</h2>
     <select id="chatList"></select>
     <div class="messages" id="adminMessages"></div>
-    <input type="text" id="adminInput" placeholder="উত্তর লিখুন...">
-    <button onclick="sendReply()">পাঠান</button>
+    <div class="input-group">
+      <input type="text" id="adminInput" placeholder="উত্তর লিখুন...">
+      <button onclick="sendReply()">পাঠান</button>
+    </div>
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -58,7 +90,6 @@
       storageBucket: "selfsms-eb6be.appspot.com",
       messagingSenderId: "853538074774",
       appId: "1:853538074774:web:2672986a311486f30012b7",
-      measurementId: "G-H57Z62W5MX",
       databaseURL: "https://selfsms-eb6be-default-rtdb.firebaseio.com"
     };
     firebase.initializeApp(firebaseConfig);
@@ -69,7 +100,7 @@
     let currentChat = null;
 
     db.ref("messages").on("value", snapshot => {
-      chatList.innerHTML = "";
+      chatList.innerHTML = "<option disabled selected>চ্যাট নির্বাচন করুন</option>";
       snapshot.forEach(child => {
         const opt = document.createElement("option");
         opt.value = child.key;
@@ -85,8 +116,7 @@
       db.ref("messages/" + currentChat).on("child_added", snap => {
         const msg = snap.val();
         const div = document.createElement("div");
-        div.className = "message";
-        if (msg.sender === "user") div.classList.add("user");
+        div.className = "message " + msg.sender;
         div.textContent = msg.text;
         adminMessages.appendChild(div);
         adminMessages.scrollTop = adminMessages.scrollHeight;
