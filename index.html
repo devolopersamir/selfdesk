@@ -201,6 +201,33 @@
         <button class="doctor-btn bg-dark" onclick="searchNearestBusStation()"><i class="fas fa-bus"></i></button>
         <div class="btn-label">নিকটস্থ বাস স্টেশন</div>
       </div>
+
+      <!-- Added New Buttons -->
+      <div class="text-center">
+        <button class="doctor-btn bg-primary" onclick="searchNearestBank()"><i class="fas fa-university"></i></button>
+        <div class="btn-label">নিকটস্থ ব্যাংক</div>
+      </div>
+      <div class="text-center">
+        <button class="doctor-btn bg-warning" onclick="searchNearestATM()"><i class="fas fa-credit-card"></i></button>
+        <div class="btn-label">নিকটস্থ এটিএম</div>
+      </div>
+      <div class="text-center">
+        <button class="doctor-btn bg-info" onclick="searchNearestBkashAgent()"><i class="fas fa-mobile-alt"></i></button>
+        <div class="btn-label">নিকটস্থ বিকাশ এজেন্ট</div>
+      </div>
+      <div class="text-center">
+        <button class="doctor-btn bg-secondary" onclick="searchNearestPharmacy()"><i class="fas fa-pills"></i></button>
+        <div class="btn-label">নিকটস্থ ফার্মেসি</div>
+      </div>
+      <div class="text-center">
+        <button class="doctor-btn bg-danger" onclick="searchRoadCondition()"><i class="fas fa-road"></i></button>
+        <div class="btn-label">রাস্তার অবস্থা</div>
+      </div>
+      <div class="text-center">
+        <button class="doctor-btn bg-dark" onclick="searchWeather()"><i class="fas fa-sun"></i></button>
+        <div class="btn-label">আবাহাওয়া</div>
+      </div>
+
       <!-- Added Detector Button -->
       <div class="text-center">
         <button class="doctor-btn bg-primary" onclick="showDetectorInfo()"><i class="fas fa-search"></i></button>
@@ -225,10 +252,89 @@
       const detectorInfo = `
         <div class="result-card">
           <h5>ডেটেক্টর</h5>
-          <p>আপনার স্থান নিরাপদ। আপনার বর্তমান স্থানে এর আগে কখনো অপরাধ সংঘটিত হয়নি। নিরাপদ থাকুন, সুস্থ থাকুন।</p>
+          <p>এটি একটি ডেটেক্টর ফিচার, যা আপনার বর্তমান অবস্থান বা সার্চ অনুসারে তথ্য সরবরাহ করতে সাহায্য করবে।</p>
+          <p>এখন এটি কেবল পরীক্ষামূলক। ভবিষ্যতে আরও উন্নত ফিচার যোগ করা হবে।</p>
         </div>
       `;
       resultsDiv.innerHTML = detectorInfo;
+    }
+
+    // Function to search nearest bank
+    function searchNearestBank() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const bankInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ ব্যাংক</h5>
+          <p>আপনার বর্তমান অবস্থানের কাছাকাছি ব্যাংক খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = bankInfo;
+    }
+
+    // Function to search nearest ATM
+    function searchNearestATM() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const atmInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ এটিএম</h5>
+          <p>আপনার কাছাকাছি এটিএম খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = atmInfo;
+    }
+
+    // Function to search nearest Bkash agent
+    function searchNearestBkashAgent() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const bkashAgentInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ বিকাশ এজেন্ট</h5>
+          <p>আপনার কাছাকাছি বিকাশ এজেন্ট খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = bkashAgentInfo;
+    }
+
+    // Function to search nearest pharmacy
+    function searchNearestPharmacy() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const pharmacyInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ ফার্মেসি</h5>
+          <p>আপনার কাছাকাছি ফার্মেসি খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = pharmacyInfo;
+    }
+
+    // Function to search road condition
+    function searchRoadCondition() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const roadConditionInfo = `
+        <div class="result-card">
+          <h5>রাস্তার অবস্থা</h5>
+          <p>আপনার এলাকার রাস্তার অবস্থা জানুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = roadConditionInfo;
+    }
+
+    // Function to search weather
+    function searchWeather() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const weatherInfo = `
+        <div class="result-card">
+          <h5>আবাহাওয়া</h5>
+          <p>আপনার অবস্থানে বর্তমান আবাহাওয়া জানুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = weatherInfo;
     }
 
     // Function to search nearest doctor
