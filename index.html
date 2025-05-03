@@ -201,11 +201,11 @@
         <button class="doctor-btn bg-dark" onclick="searchNearestBusStation()"><i class="fas fa-bus"></i></button>
         <div class="btn-label">নিকটস্থ বাস স্টেশন</div>
       </div>
-    </div>
-
-    <!-- Detector button -->
-    <div class="text-center">
-      <button class="btn btn-primary" onclick="showDetectorMessage()">ডেটেক্টর</button>
+      <!-- Added Detector Button -->
+      <div class="text-center">
+        <button class="doctor-btn bg-primary" onclick="showDetectorInfo()"><i class="fas fa-search"></i></button>
+        <div class="btn-label">ডেটেক্টর</div>
+      </div>
     </div>
 
     <div id="results" class="mt-4"></div>
@@ -218,58 +218,32 @@
 
   <!-- Script -->
   <script>
-    const courtPolice = [
-      { name: "রুহুল আমিন", role: "পুলিশ অফিসার, আদালত", phone: "০১৩২০-০৯৬৩২৫", address: "টাঙ্গাইল জেলা আদালত", lat: 24.2513, lng: 89.9167 },
-      { name: "সালেহা বেগম", role: "পুলিশ অফিসার, আদালত", phone: "০১৩২০-০৯৬৩৩০", address: "টাঙ্গাইল জেলা আদালত", lat: 24.2513, lng: 89.9167 }
-    ];
-
-    const doctors = [
-      { name: "ডা. তাহমিনা হক", role: "চিকিৎসক, মেডিসিন", phone: "০১৭১২৩৪৫৬৭৮", address: "টাঙ্গাইল মেডিকেল", lat: 24.2500, lng: 89.9150 },
-      { name: "ডা. আসিফ রহমান", role: "সার্জন", phone: "০১৮১২৩৪৫৬৭৮", address: "টাঙ্গাইল জেনারেল হাসপাতাল", lat: 24.2518, lng: 89.9160 }
-    ];
-
-    const places = [
-      { name: "মসজিদ-১", role: "নিকটস্থ মসজিদ", phone: "০১৩২০-০০০০০০", address: "টাঙ্গাইল মসজিদ", lat: 24.2520, lng: 89.9170 },
-      { name: "সুপারশপ-১", role: "নিকটস্থ সুপারশপ", phone: "০১৩২০-০০০০০০", address: "টাঙ্গাইল সুপারশপ", lat: 24.2525, lng: 89.9180 }
-    ];
-
-    // Function to show the Detector message
-    function showDetectorMessage() {
-      alert("আপনার বর্তমান যায়গা নিরাপদ। উক্ত স্থানে কোন অপরাধ হয়নি। ধন্যবাদ।");
+    // Function to show detector information
+    function showDetectorInfo() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const detectorInfo = `
+        <div class="result-card">
+          <h5>ডেটেক্টর</h5>
+          <p>এটি একটি ডেটেক্টর ফিচার, যা আপনার বর্তমান অবস্থান বা সার্চ অনুসারে তথ্য সরবরাহ করতে সাহায্য করবে।</p>
+          <p>এখন এটি কেবল পরীক্ষামূলক। ভবিষ্যতে আরও উন্নত ফিচার যোগ করা হবে।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = detectorInfo;
     }
 
     // Function to search nearest doctor
     function searchNearestDoctor() {
       let resultsDiv = document.getElementById('results');
       resultsDiv.innerHTML = '';  // Clear previous results
-      doctors.forEach(doctor => {
-        let resultCard = document.createElement('div');
-        resultCard.classList.add('result-card');
-        resultCard.innerHTML = `
-          <h5>${doctor.name}</h5>
-          <p>ভূমিকা: ${doctor.role}</p>
-          <p>ফোন: ${doctor.phone}</p>
-          <p>ঠিকানা: ${doctor.address}</p>
-        `;
-        resultsDiv.appendChild(resultCard);
-      });
+      // Add doctor data or function to display doctor search results
     }
 
     // Function to search by location (Court Police)
     function searchByLocation() {
       let resultsDiv = document.getElementById('results');
       resultsDiv.innerHTML = '';  // Clear previous results
-      courtPolice.forEach(police => {
-        let resultCard = document.createElement('div');
-        resultCard.classList.add('result-card');
-        resultCard.innerHTML = `
-          <h5>${police.name}</h5>
-          <p>ভূমিকা: ${police.role}</p>
-          <p>ফোন: ${police.phone}</p>
-          <p>ঠিকানা: ${police.address}</p>
-        `;
-        resultsDiv.appendChild(resultCard);
-      });
+      // Add police or location search logic here
     }
   </script>
 
