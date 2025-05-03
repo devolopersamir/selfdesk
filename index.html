@@ -4,10 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>নাগরিক সার্চ ইঞ্জিন</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mapbox/mapbox-gl-js@2.0.1/dist/mapbox-gl.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'SolaimanLipi', sans-serif;
+            background-color: #f0f8ff;
+        }
+
+        h1 {
+            font-family: 'SolaimanLipi', sans-serif;
+            color: #007bff;
+        }
+
+        button {
+            font-size: 18px;
+        }
+
+        .result-card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .result-card h5 {
+            font-size: 22px;
+            color: #333;
+        }
+
+        .result-card p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .result-card .btn-contact {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .result-card .btn-contact:hover {
+            background-color: #218838;
+        }
+
+        #results {
+            padding-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -21,6 +70,112 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const doctors = [
+            {
+                name: "ডাঃ মোঃ সাইফুল ইসলাম (স্বপন)",
+                qualification: "এমবিবিএস (ঢাকা), পিজিটি (সার্জারি, গাইনী)",
+                specialty: "সার্জন ও গাইনী চিকিৎসক",
+                visitingHours: "প্রতিদিন সকাল ৮টা - দুপুর ২টা, বিকেল ৫টা - রাত ৮টা",
+                phone: "01819132643",
+                chamber: "শামছুল হক মেমরিয়াল হসপিটাল",
+                lat: 24.2513,
+                lng: 89.9167
+            },
+            {
+                name: "ডাঃ মারজিয়া খানম",
+                qualification: "এমবিবিএস, বিসিএস (স্বাস্থ্য), এফসিপিএস (গাইনী অ্যান্ড অবস)",
+                specialty: "প্রসূতি ও স্ত্রীরোগ বিশেষজ্ঞ এবং সার্জন",
+                visitingHours: "প্রতি শুক্রবার সকাল ৯টা - বিকেল ৫টা",
+                phone: "01790336296, 01716206793, 01816081048",
+                chamber: "আল শেফা ক্লিনিক এন্ড নার্সিং হোম",
+                lat: 24.2513,
+                lng: 89.9167
+            },
+            {
+                name: "ডাঃ এম এম জালাল উদ্দিন",
+                qualification: "এমবিবিএস, এফসিপিএস",
+                specialty: "মনোরোগ, মনযৌন রোগ, মাদকাসক্ত ও ব্রেইন মেডিসিন বিশেষজ্ঞ",
+                visitingHours: "প্রতি শুক্রবার সকাল ৯টা - বিকেল ৫টা",
+                phone: "01718914242",
+                chamber: "টাঙ্গাইল ক্লিনিক এন্ড হসপিটাল",
+                lat: 24.2513,
+                lng: 89.9167
+            },
+            {
+                name: "ডাঃ মোঃ সামিউল ইসলাম",
+                qualification: "এমবিবিএস (স্বাস্থ্য), ডি-কার্ড (বিএসএমএমইউ), এফসিপিএস (কার্ডিওলজি)",
+                specialty: "সহকারী অধ্যাপক (কার্ডিওলজি)",
+                visitingHours: "প্রতিদিন বিকেল ৩টা - রাত ৮টা",
+                phone: "01758822190, 01758835102",
+                chamber: "দেশবন্ধু হাসপাতাল এন্ড ডায়াগনস্টিক সেন্টার",
+                lat: 24.2513,
+                lng: 89.9167
+            },
+            {
+                name: "ডাঃ আকলিমা খান সুমি",
+                qualification: "এমবিবিএস (ঢা.বি), পিজিটি (গাইনী এন্ড অবস)",
+                specialty: "স্ত্রী ও প্রসূতি রোগ চিকিৎসক ও সার্জন",
+                visitingHours: "প্রতিদিন সকাল - সন্ধ্যা",
+                phone: "01716206793, 01816081048",
+                chamber: "আল শেফা ক্লিনিক এন্ড নার্সিং হোম",
+                lat: 24.2513,
+                lng: 89.9167
+            }
+        ];
+
+        function searchByLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+
+                    const nearbyDoctors = doctors
+                        .map(doctor => {
+                            const distance = getDistance(userLat, userLng, doctor.lat, doctor.lng);
+                            return { ...doctor, distance };
+                        })
+                        .sort((a, b) => a.distance - b.distance)
+                        .slice(0, 3);
+
+                    displayDoctors(nearbyDoctors);
+                }, () => {
+                    alert("লোকেশন অনুমতি দেওয়া হয়নি।");
+                });
+            } else {
+                alert("আপনার ব্রাউজার লোকেশন সাপোর্ট করে না।");
+            }
+        }
+
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        function displayDoctors(doctors) {
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "";
+
+            doctors.forEach(doctor => {
+                const card = document.createElement("div");
+                card.className = "result-card";
+                card.innerHTML = `
+                    <h5>${doctor.name}</h5>
+                    <p><strong>পদবি:</strong> ${doctor.specialty}</p>
+                    <p><strong>ফোন:</strong> ${doctor.phone}</p>
+                    <p><strong>ঠিকানা:</strong> ${doctor.chamber}</p>
+                    <p><strong>দূরত্ব:</strong> ${doctor.distance.toFixed(2)} কিমি</p>
+                    <button class="btn btn-contact">যোগাযোগ করুন</button>
+                `;
+                resultsDiv.appendChild(card);
+            });
+        }
+    </script>
 </body>
 </html>
