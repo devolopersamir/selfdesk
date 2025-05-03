@@ -93,6 +93,7 @@
   <div class="container">
     <input type="text" class="form-control search-bar" id="searchInput" placeholder="যেমনঃ ডা. তাহমিনা, পুলিশ বা সার্কেল..." />
     <button class="btn btn-success d-block mx-auto mt-2 mb-4" onclick="searchByLocation()">আমার কাছে কে আছেন?</button>
+    <button class="btn btn-primary d-block mx-auto mt-2 mb-4" onclick="showNearbyDoctors()">নিকটস্থ ডক্টর</button>
     <div id="results" class="mt-4"></div>
   </div>
 
@@ -103,107 +104,34 @@
 
   <!-- Script -->
   <script>
-    const courtPolice = [
-      {
-        name: "জনাব মোঃ আবুল কালাম",
-        role: "চিফ জুডিশিয়াল ম্যাজিস্ট্রেট",
-        phone: "০১৩২০-০৯৬৩২০",
-        address: "টাঙ্গাইল জেলা আদালত",
-        lat: 24.2513,
-        lng: 89.9167
-      },
-      {
-        name: "মোঃ আলমগীর হোসেন",
-        role: "আদালত কর্মচারী",
-        phone: "০১৩২০-০৯৬৩২৪",
-        address: "টাঙ্গাইল জেলা আদালত",
-        lat: 24.2513,
-        lng: 89.9167
-      },
-      {
-        name: "রুহুল আমিন",
-        role: "পুলিশ অফিসার, আদালত",
-        phone: "০১৩২০-০৯৬৩২৫",
-        address: "টাঙ্গাইল জেলা আদালত",
-        lat: 24.2513,
-        lng: 89.9167
-      },
-      {
-        name: "সালেহা বেগম",
-        role: "পুলিশ অফিসার, আদালত",
-        phone: "০১৩২০-০৯৬৩৩০",
-        address: "টাঙ্গাইল জেলা আদালত",
-        lat: 24.2513,
-        lng: 89.9167
-      }
-    ];
-
     const doctors = [
       {
-        name: "ডা. সেলিম সিদ্দিকী",
-        specialization: "চিকিৎসক",
-        phone: "০১৯১২-৩৪৫৬৭৮",
-        address: "টাঙ্গাইল শহর",
+        name: "ডা. তাহমিনা",
+        role: "চিকিৎসক",
+        phone: "০১৩২০-০৯৬৩২০",
+        address: "টাঙ্গাইল হাসপাতাল",
         lat: 24.2513,
         lng: 89.9167
       },
       {
-        name: "ডা. তাহমিনা আক্তার",
-        specialization: "গাইনী",
-        phone: "০১৯১২-৩৪৫৬৭৯",
-        address: "টাঙ্গাইল জেলা হাসপাতাল",
-        lat: 24.2515,
-        lng: 89.9169
+        name: "ডা. সোহেল",
+        role: "চিকিৎসক",
+        phone: "০১৩২০-০৯৬৩৩০",
+        address: "টাঙ্গাইল হাসপাতাল",
+        lat: 24.2578,
+        lng: 89.9077
       },
       {
-        name: "ডা. ফারুক হোসেন",
-        specialization: "ডেন্টিস্ট",
-        phone: "০১৯১২-৩৪৫৬৮০",
-        address: "টাঙ্গাইল মেডিকেল সেন্টার",
-        lat: 24.2512,
-        lng: 89.9170
+        name: "ডা. রাহুল",
+        role: "চিকিৎসক",
+        phone: "০১৩২০-০৯৬৩৩৫",
+        address: "টাঙ্গাইল হাসপাতাল",
+        lat: 24.2420,
+        lng: 89.9120
       }
     ];
 
-    const searchInput = document.getElementById("searchInput");
     const resultsDiv = document.getElementById("results");
-
-    searchInput.addEventListener("input", () => {
-      const query = searchInput.value.toLowerCase();
-      resultsDiv.innerHTML = "";
-
-      const filteredCourtPolice = courtPolice.filter((person) =>
-        person.name.toLowerCase().includes(query) ||
-        person.role.toLowerCase().includes(query) ||
-        person.address.toLowerCase().includes(query)
-      );
-
-      const filteredDoctors = doctors.filter((doctor) =>
-        doctor.name.toLowerCase().includes(query) ||
-        doctor.specialization.toLowerCase().includes(query) ||
-        doctor.address.toLowerCase().includes(query)
-      );
-
-      const filteredResults = [...filteredCourtPolice, ...filteredDoctors];
-
-      if (filteredResults.length === 0) {
-        resultsDiv.innerHTML = '<p class="text-danger text-center mt-4">কোনো ফলাফল পাওয়া যায়নি।</p>';
-        return;
-      }
-
-      filteredResults.forEach((person) => {
-        const card = document.createElement("div");
-        card.className = "result-card";
-        card.innerHTML = `
-          <h5>${person.name}</h5>
-          <p><strong>পদবি/বিশেষজ্ঞতা:</strong> ${person.role || person.specialization}</p>
-          <p><strong>ফোন:</strong> ${person.phone}</p>
-          <p><strong>ঠিকানা:</strong> ${person.address}</p>
-          <button class="btn btn-contact">যোগাযোগ করুন</button>
-        `;
-        resultsDiv.appendChild(card);
-      });
-    });
 
     function getDistance(lat1, lon1, lat2, lon2) {
       const R = 6371;
@@ -216,35 +144,34 @@
       return R * c;
     }
 
-    function searchByLocation() {
+    function showNearbyDoctors() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
           const userLat = position.coords.latitude;
           const userLng = position.coords.longitude;
 
-          const nearby = [...courtPolice, ...doctors]
-            .map(c => {
-              const dist = getDistance(userLat, userLng, c.lat, c.lng);
-              return {...c, distance: dist};
+          const nearbyDoctors = doctors
+            .map(d => {
+              const dist = getDistance(userLat, userLng, d.lat, d.lng);
+              return {...d, distance: dist};
             })
             .sort((a, b) => a.distance - b.distance)
             .slice(0, 3);
 
           resultsDiv.innerHTML = '';
-          nearby.forEach(person => {
+          nearbyDoctors.forEach(doctor => {
             const card = document.createElement("div");
             card.className = "result-card";
             card.innerHTML = `
-              <h5>${person.name}</h5>
-              <p><strong>পদবি/বিশেষজ্ঞতা:</strong> ${person.role || person.specialization}</p>
-              <p><strong>ফোন:</strong> ${person.phone}</p>
-              <p><strong>ঠিকানা:</strong> ${person.address}</p>
-              <p><strong>দূরত্ব:</strong> ${person.distance.toFixed(2)} কিমি</p>
+              <h5>${doctor.name}</h5>
+              <p><strong>পদবি:</strong> ${doctor.role}</p>
+              <p><strong>ফোন:</strong> ${doctor.phone}</p>
+              <p><strong>ঠিকানা:</strong> ${doctor.address}</p>
+              <p><strong>দূরত্ব:</strong> ${doctor.distance.toFixed(2)} কিমি</p>
               <button class="btn btn-contact">যোগাযোগ করুন</button>
             `;
             resultsDiv.appendChild(card);
           });
-
         }, () => {
           alert("লোকেশন অনুমতি দেওয়া হয়নি।");
         });
