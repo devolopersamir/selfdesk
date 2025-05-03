@@ -114,13 +114,6 @@
       background-color: #f8f8f8;
       margin-top: 50px;
     }
-
-    #map {
-      height: 400px;
-      margin-top: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
   </style>
 </head>
 <body>
@@ -144,12 +137,33 @@
         <button class="doctor-btn bg-success" onclick="searchByLocation()"><i class="fas fa-shield-alt"></i></button>
         <div class="btn-label">নিকটস্থ প্রশাসন</div>
       </div>
+      <div class="text-center">
+        <button class="doctor-btn bg-warning" onclick="searchNearestMosque()"><i class="fas fa-mosque"></i></button>
+        <div class="btn-label">নিকটস্থ মসজিদ</div>
+      </div>
+      <div class="text-center">
+        <button class="doctor-btn bg-info" onclick="searchNearestShop()"><i class="fas fa-store"></i></button>
+        <div class="btn-label">নিকটস্থ সুপারশপ</div>
+      </div>
+      <div class="text-center">
+        <button class="doctor-btn bg-secondary" onclick="searchNearestSchool()"><i class="fas fa-school"></i></button>
+        <div class="btn-label">নিকটস্থ স্কুল</div>
+      </div>
+      <div class="text-center">
+        <button class="doctor-btn bg-danger" onclick="searchNearestHospital()"><i class="fas fa-hospital"></i></button>
+        <div class="btn-label">নিকটস্থ হাসপাতাল</div>
+      </div>
+      <div class="text-center">
+        <button class="doctor-btn bg-primary" onclick="searchNearestFireStation()"><i class="fas fa-fire-extinguisher"></i></button>
+        <div class="btn-label">নিকটস্থ ফায়ার স্টেশন</div>
+      </div>
+      <div class="text-center">
+        <button class="doctor-btn bg-dark" onclick="searchNearestBusStation()"><i class="fas fa-bus"></i></button>
+        <div class="btn-label">নিকটস্থ বাস স্টেশন</div>
+      </div>
     </div>
 
     <div id="results" class="mt-4"></div>
-
-    <!-- Map -->
-    <div id="map"></div>
   </div>
 
   <!-- Footer -->
@@ -197,6 +211,58 @@
       }
     ];
 
+    // New places data
+    const places = [
+      {
+        name: "মসজিদ-১",
+        role: "নিকটস্থ মসজিদ",
+        phone: "০১৩২০-০০০০০০",
+        address: "টাঙ্গাইল মসজিদ",
+        lat: 24.2520,
+        lng: 89.9170
+      },
+      {
+        name: "সুপারশপ-১",
+        role: "নিকটস্থ সুপারশপ",
+        phone: "০১৩২০-০০০০০০",
+        address: "টাঙ্গাইল সুপারশপ",
+        lat: 24.2525,
+        lng: 89.9175
+      },
+      {
+        name: "স্কুল-১",
+        role: "নিকটস্থ স্কুল",
+        phone: "০১৩২০-০০০০০০",
+        address: "টাঙ্গাইল স্কুল",
+        lat: 24.2530,
+        lng: 89.9180
+      },
+      {
+        name: "হাসপাতাল-১",
+        role: "নিকটস্থ হাসপাতাল",
+        phone: "০১৩২০-০০০০০০",
+        address: "টাঙ্গাইল হাসপাতাল",
+        lat: 24.2535,
+        lng: 89.9185
+      },
+      {
+        name: "ফায়ার স্টেশন-১",
+        role: "নিকটস্থ ফায়ার স্টেশন",
+        phone: "০১৩২০-০০০০০০",
+        address: "টাঙ্গাইল ফায়ার স্টেশন",
+        lat: 24.2540,
+        lng: 89.9190
+      },
+      {
+        name: "বাস স্টেশন-১",
+        role: "নিকটস্থ বাস স্টেশন",
+        phone: "০১৩২০-০০০০০০",
+        address: "টাঙ্গাইল বাস স্টেশন",
+        lat: 24.2545,
+        lng: 89.9195
+      }
+    ];
+
     const searchInput = document.getElementById("searchInput");
     const resultsDiv = document.getElementById("results");
 
@@ -204,7 +270,7 @@
       const query = searchInput.value.toLowerCase();
       resultsDiv.innerHTML = "";
 
-      const combined = [...courtPolice, ...doctors];
+      const combined = [...courtPolice, ...doctors, ...places];
 
       const filtered = combined.filter((person) =>
         person.name.toLowerCase().includes(query) ||
@@ -254,7 +320,6 @@
             .slice(0, 3);
 
           displayResults(nearby);
-          showMap(userLat, userLng, nearby);
         }, () => {
           alert("লোকেশন অনুমতি দেওয়া হয়নি।");
         });
@@ -273,7 +338,25 @@
             .slice(0, 3);
 
           displayResults(nearby);
-          showMap(userLat, userLng, nearby);
+        }, () => {
+          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
+        });
+      }
+    }
+
+    function searchNearestMosque() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+
+          const nearby = places
+            .filter(place => place.role.includes("মসজিদ"))
+            .map(place => ({ ...place, distance: getDistance(userLat, userLng, place.lat, place.lng) }))
+            .sort((a, b) => a.distance - b.distance)
+            .slice(0, 3);
+
+          displayResults(nearby);
         }, () => {
           alert("লোকেশন অনুমতি দেওয়া হয়নি।");
         });
@@ -289,4 +372,14 @@
           <h5>${item.name}</h5>
           <p><strong>পদবি:</strong> ${item.role}</p>
           <p><strong>ফোন:</strong> ${item.phone}</p>
-          <p><strong>ঠিকানা:</strong> ${item.address
+          <p><strong>ঠিকানা:</strong> ${item.address}</p>
+          <p><strong>দূরত্ব:</strong> ${item.distance.toFixed(2)} কিমি</p>
+          <button class="btn btn-contact">যোগাযোগ করুন</button>
+        `;
+        resultsDiv.appendChild(card);
+      });
+    }
+  </script>
+
+</body>
+  </html>
