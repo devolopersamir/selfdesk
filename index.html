@@ -192,13 +192,11 @@
         <button class="doctor-btn bg-dark" onclick="searchNearestBusStation()"><i class="fas fa-bus"></i></button>
         <div class="btn-label">নিকটস্থ বাস স্টেশন</div>
       </div>
-      <!-- New Detector Button -->
-      <div class="text-center">
-        <button class="doctor-btn bg-light text-dark" onclick="searchNearestDetector()">
-          <i class="fas fa-broadcast-tower"></i>
-        </button>
-        <div class="btn-label">ডেটেক্টর</div>
-      </div>
+    </div>
+
+    <!-- Detector button -->
+    <div class="text-center">
+      <button class="btn btn-primary" onclick="showDetectorMessage()">ডেটেক্টর</button>
     </div>
 
     <div id="results" class="mt-4"></div>
@@ -212,147 +210,163 @@
   <!-- Script -->
   <script>
     const courtPolice = [
-      {
-        name: "রুহুল আমিন",
-        role: "পুলিশ অফিসার, আদালত",
-        phone: "০১৩২০-০৯৬৩২৫",
-        address: "টাঙ্গাইল জেলা আদালত",
-        lat: 24.2513,
-        lng: 89.9167
-      },
-      {
-        name: "সালেহা বেগম",
-        role: "পুলিশ অফিসার, আদালত",
-        phone: "০১৩২০-০৯৬৩৩০",
-        address: "টাঙ্গাইল জেলা আদালত",
-        lat: 24.2513,
-        lng: 89.9167
-      }
+      { name: "রুহুল আমিন", role: "পুলিশ অফিসার, আদালত", phone: "০১৩২০-০৯৬৩২৫", address: "টাঙ্গাইল জেলা আদালত", lat: 24.2513, lng: 89.9167 },
+      { name: "সালেহা বেগম", role: "পুলিশ অফিসার, আদালত", phone: "০১৩২০-০৯৬৩৩০", address: "টাঙ্গাইল জেলা আদালত", lat: 24.2513, lng: 89.9167 }
     ];
 
     const doctors = [
-      {
-        name: "ডা. তাহমিনা হক",
-        role: "চিকিৎসক, মেডিসিন",
-        phone: "০১৭১২৩৪৫৬৭৮",
-        address: "টাঙ্গাইল মেডিকেল",
-        lat: 24.2500,
-        lng: 89.9150
-      },
-      {
-        name: "ডা. আসিফ রহমান",
-        role: "সার্জন",
-        phone: "০১৮১২৩৪৫৬৭৮",
-        address: "টাঙ্গাইল জেনারেল হাসপাতাল",
-        lat: 24.2518,
-        lng: 89.9160
-      }
+      { name: "ডা. তাহমিনা হক", role: "চিকিৎসক, মেডিসিন", phone: "০১৭১২৩৪৫৬৭৮", address: "টাঙ্গাইল মেডিকেল", lat: 24.2500, lng: 89.9150 },
+      { name: "ডা. আসিফ রহমান", role: "সার্জন", phone: "০১৮১২৩৪৫৬৭৮", address: "টাঙ্গাইল জেনারেল হাসপাতাল", lat: 24.2518, lng: 89.9160 }
     ];
 
-    // New places data
     const places = [
-      {
-        name: "মসজিদ-১",
-        role: "নিকটস্থ মসজিদ",
-        phone: "০১৩২০-০০০০০০",
-        address: "টাঙ্গাইল মসজিদ",
-        lat: 24.2520,
-        lng: 89.9170
-      },
-      {
-        name: "সুপারশপ-১",
-        role: "নিকটস্থ সুপারশপ",
-        phone: "০১৩২০-০০০০০০",
-        address: "টাঙ্গাইল সুপারশপ",
-        lat: 24.2525,
-        lng: 89.9175
-      },
-      {
-        name: "স্কুল-১",
-        role: "নিকটস্থ স্কুল",
-        phone: "০১৩২০-০০০০০০",
-        address: "টাঙ্গাইল স্কুল",
-        lat: 24.2530,
-        lng: 89.9180
-      },
-      {
-        name: "হাসপাতাল-১",
-        role: "নিকটস্থ হাসপাতাল",
-        phone: "০১৩২০-০০০০০০",
-        address: "টাঙ্গাইল হাসপাতাল",
-        lat: 24.2535,
-        lng: 89.9185
-      }
+      { name: "মসজিদ-১", role: "নিকটস্থ মসজিদ", phone: "০১৩২০-০০০০০০", address: "টাঙ্গাইল মসজিদ", lat: 24.2520, lng: 89.9170 },
+      { name: "সুপারশপ-১", role: "নিকটস্থ সুপারশপ", phone: "০১৩২০-০০০০০০", address: "টাঙ্গাইল সুপারশপ", lat: 24.2525, lng: 89.9180 }
     ];
 
-    // Function to display results dynamically
-    function displayResults(results) {
-      let output = '';
-      results.forEach(result => {
-        output += `
-          <div class="result-card">
-            <h5>${result.name}</h5>
-            <p><strong>পদবী:</strong> ${result.role}</p>
-            <p><strong>ফোন:</strong> ${result.phone}</p>
-            <p><strong>ঠিকানা:</strong> ${result.address}</p>
-            <button class="btn btn-contact" onclick="window.location.href='tel:${result.phone}'">কল করুন</button>
-          </div>
-        `;
-      });
-      document.getElementById('results').innerHTML = output;
+    // Function to show the Detector message
+    function showDetectorMessage() {
+      alert("আপনার বর্তমান যায়গা নিরাপদ। উক্ত স্থানে কোন অপরাধ হয়নি। ধন্যবাদ।");
     }
 
-    // Search functions
+    // Function to search nearest doctor
     function searchNearestDoctor() {
-      displayResults(doctors);
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      doctors.forEach(doctor => {
+        let resultCard = document.createElement('div');
+        resultCard.classList.add('result-card');
+        resultCard.innerHTML = `
+          <h5>${doctor.name}</h5>
+          <p>ভূমিকা: ${doctor.role}</p>
+          <p>ফোন: ${doctor.phone}</p>
+          <p>ঠিকানা: ${doctor.address}</p>
+        `;
+        resultsDiv.appendChild(resultCard);
+      });
     }
 
+    // Function to search by location (Court Police)
     function searchByLocation() {
-      displayResults(courtPolice);
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      courtPolice.forEach(police => {
+        let resultCard = document.createElement('div');
+        resultCard.classList.add('result-card');
+        resultCard.innerHTML = `
+          <h5>${police.name}</h5>
+          <p>ভূমিকা: ${police.role}</p>
+          <p>ফোন: ${police.phone}</p>
+          <p>ঠিকানা: ${police.address}</p>
+        `;
+        resultsDiv.appendChild(resultCard);
+      });
     }
 
+    // Function to search nearest mosque
     function searchNearestMosque() {
-      displayResults(places.filter(place => place.role.includes("মসজিদ")));
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      places.forEach(place => {
+        let resultCard = document.createElement('div');
+        resultCard.classList.add('result-card');
+        resultCard.innerHTML = `
+          <h5>${place.name}</h5>
+          <p>ভূমিকা: ${place.role}</p>
+          <p>ফোন: ${place.phone}</p>
+          <p>ঠিকানা: ${place.address}</p>
+        `;
+        resultsDiv.appendChild(resultCard);
+      });
     }
 
+    // Function to search nearest shop
     function searchNearestShop() {
-      displayResults(places.filter(place => place.role.includes("সুপারশপ")));
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      places.forEach(place => {
+        let resultCard = document.createElement('div');
+        resultCard.classList.add('result-card');
+        resultCard.innerHTML = `
+          <h5>${place.name}</h5>
+          <p>ভূমিকা: ${place.role}</p>
+          <p>ফোন: ${place.phone}</p>
+          <p>ঠিকানা: ${place.address}</p>
+        `;
+        resultsDiv.appendChild(resultCard);
+      });
     }
 
+    // Function to search nearest school
     function searchNearestSchool() {
-      displayResults(places.filter(place => place.role.includes("স্কুল")));
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      places.forEach(place => {
+        let resultCard = document.createElement('div');
+        resultCard.classList.add('result-card');
+        resultCard.innerHTML = `
+          <h5>${place.name}</h5>
+          <p>ভূমিকা: ${place.role}</p>
+          <p>ফোন: ${place.phone}</p>
+          <p>ঠিকানা: ${place.address}</p>
+        `;
+        resultsDiv.appendChild(resultCard);
+      });
     }
 
+    // Function to search nearest hospital
     function searchNearestHospital() {
-      displayResults(places.filter(place => place.role.includes("হাসপাতাল")));
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      places.forEach(place => {
+        let resultCard = document.createElement('div');
+        resultCard.classList.add('result-card');
+        resultCard.innerHTML = `
+          <h5>${place.name}</h5>
+          <p>ভূমিকা: ${place.role}</p>
+          <p>ফোন: ${place.phone}</p>
+          <p>ঠিকানা: ${place.address}</p>
+        `;
+        resultsDiv.appendChild(resultCard);
+      });
     }
 
+    // Function to search nearest fire station
     function searchNearestFireStation() {
-      displayResults(places.filter(place => place.role.includes("ফায়ার স্টেশন")));
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      places.forEach(place => {
+        let resultCard = document.createElement('div');
+        resultCard.classList.add('result-card');
+        resultCard.innerHTML = `
+          <h5>${place.name}</h5>
+          <p>ভূমিকা: ${place.role}</p>
+          <p>ফোন: ${place.phone}</p>
+          <p>ঠিকানা: ${place.address}</p>
+        `;
+        resultsDiv.appendChild(resultCard);
+      });
     }
 
+    // Function to search nearest bus station
     function searchNearestBusStation() {
-      displayResults(places.filter(place => place.role.includes("বাস স্টেশন")));
-    }
-
-    // New Detector function
-    function searchNearestDetector() {
-      const detectors = [
-        {
-          name: "ডেটেক্টর-১",
-          role: "নিকটস্থ ডেটেক্টর",
-          phone: "০১৩২০-০০০০০০",
-          address: "টাঙ্গাইল ডেটেক্টর",
-          lat: 24.2540,
-          lng: 89.9190
-        }
-      ];
-      displayResults(detectors);
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      places.forEach(place => {
+        let resultCard = document.createElement('div');
+        resultCard.classList.add('result-card');
+        resultCard.innerHTML = `
+          <h5>${place.name}</h5>
+          <p>ভূমিকা: ${place.role}</p>
+          <p>ফোন: ${place.phone}</p>
+          <p>ঠিকানা: ${place.address}</p>
+        `;
+        resultsDiv.appendChild(resultCard);
+      });
     }
   </script>
 
-  <!-- Bootstrap JS -->
+  <!-- Bootstrap and jQuery JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
