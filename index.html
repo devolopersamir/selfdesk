@@ -77,7 +77,6 @@
 
     .circle-btn-container {
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
       margin: 30px auto;
@@ -116,33 +115,17 @@
       margin-top: 50px;
     }
 
-    /* Mobile responsive design */
+    /* Responsive Design */
     @media (max-width: 768px) {
-      .header h1 {
-        font-size: 28px;
-      }
-
-      .search-bar {
-        width: 90%;
-        font-size: 16px;
-      }
-
       .circle-btn-container {
-        gap: 15px;
+        flex-direction: column;
+        gap: 10px;
       }
 
       .doctor-btn {
         width: 60px;
         height: 60px;
-        font-size: 22px;
-      }
-
-      .btn-label {
-        font-size: 14px;
-      }
-
-      footer {
-        font-size: 14px;
+        font-size: 24px;
       }
     }
   </style>
@@ -162,35 +145,31 @@
     <div class="circle-btn-container">
       <div class="text-center">
         <button class="doctor-btn" onclick="searchNearestDoctor()"><i class="fas fa-user-md"></i></button>
-        <div class="btn-label">নিকটস্থ ডাক্তার</div>
+        <div class="btn-label">ডাক্তার</div>
       </div>
       <div class="text-center">
         <button class="doctor-btn bg-success" onclick="searchByLocation()"><i class="fas fa-shield-alt"></i></button>
-        <div class="btn-label">নিকটস্থ প্রশাসন</div>
+        <div class="btn-label">প্রশাসন</div>
       </div>
       <div class="text-center">
-        <button class="doctor-btn bg-warning" onclick="searchNearestMosque()"><i class="fas fa-mosque"></i></button>
-        <div class="btn-label">নিকটস্থ মসজিদ</div>
+        <button class="doctor-btn bg-warning" onclick="searchNearestShop()"><i class="fas fa-store"></i></button>
+        <div class="btn-label">সুপারশপ</div>
       </div>
       <div class="text-center">
-        <button class="doctor-btn bg-info" onclick="searchNearestShop()"><i class="fas fa-store"></i></button>
-        <div class="btn-label">নিকটস্থ সুপারশপ</div>
-      </div>
-      <div class="text-center">
-        <button class="doctor-btn bg-secondary" onclick="searchNearestSchool()"><i class="fas fa-school"></i></button>
-        <div class="btn-label">নিকটস্থ স্কুল</div>
+        <button class="doctor-btn bg-info" onclick="searchNearestSchool()"><i class="fas fa-school"></i></button>
+        <div class="btn-label">স্কুল</div>
       </div>
       <div class="text-center">
         <button class="doctor-btn bg-danger" onclick="searchNearestHospital()"><i class="fas fa-hospital"></i></button>
-        <div class="btn-label">নিকটস্থ হাসপাতাল</div>
+        <div class="btn-label">হাসপাতাল</div>
       </div>
       <div class="text-center">
-        <button class="doctor-btn bg-primary" onclick="searchNearestFireStation()"><i class="fas fa-fire-extinguisher"></i></button>
-        <div class="btn-label">নিকটস্থ ফায়ার স্টেশন</div>
+        <button class="doctor-btn bg-primary" onclick="searchNearestFireStation()"><i class="fas fa-fire"></i></button>
+        <div class="btn-label">ফায়ার স্টেশন</div>
       </div>
       <div class="text-center">
         <button class="doctor-btn bg-dark" onclick="searchNearestBusStation()"><i class="fas fa-bus"></i></button>
-        <div class="btn-label">নিকটস্থ বাস স্টেশন</div>
+        <div class="btn-label">বাস স্টেশন</div>
       </div>
     </div>
 
@@ -242,55 +221,54 @@
       }
     ];
 
-    // New places data
     const places = [
       {
-        name: "মসজিদ-১",
-        role: "নিকটস্থ মসজিদ",
-        phone: "০১৩২০-০০০০০০",
-        address: "টাঙ্গাইল মসজিদ",
+        name: "টাঙ্গাইল মসজিদ",
+        role: "মসজিদ",
+        phone: "০১৩২০-০৯৬৩২৪",
+        address: "টাঙ্গাইল পৌরসভা",
+        lat: 24.2515,
+        lng: 89.9165
+      },
+      {
+        name: "টাঙ্গাইল সুপারশপ",
+        role: "সুপারশপ",
+        phone: "০১৭১২৩৪৫৬৭৭",
+        address: "টাঙ্গাইল বাজার",
+        lat: 24.2505,
+        lng: 89.9155
+      },
+      {
+        name: "টাঙ্গাইল স্কুল",
+        role: "স্কুল",
+        phone: "০১৮১২৩৪৫৬৭৬",
+        address: "টাঙ্গাইল বিদ্যালয়",
+        lat: 24.2498,
+        lng: 89.9149
+      },
+      {
+        name: "টাঙ্গাইল হাসপাতাল",
+        role: "হাসপাতাল",
+        phone: "০১৭১২৩৪৫৬৭৯",
+        address: "টাঙ্গাইল জেনারেল হাসপাতাল",
+        lat: 24.2510,
+        lng: 89.9172
+      },
+      {
+        name: "টাঙ্গাইল ফায়ার স্টেশন",
+        role: "ফায়ার স্টেশন",
+        phone: "০১৮১২৩৪৫৬৭",
+        address: "টাঙ্গাইল ফায়ার স্টেশন",
         lat: 24.2520,
-        lng: 89.9170
-      },
-      {
-        name: "সুপারশপ-১",
-        role: "নিকটস্থ সুপারশপ",
-        phone: "০১৩২০-০০০০০০",
-        address: "টাঙ্গাইল সুপারশপ",
-        lat: 24.2525,
-        lng: 89.9175
-      },
-      {
-        name: "স্কুল-১",
-        role: "নিকটস্থ স্কুল",
-        phone: "০১৩২০-০০০০০০",
-        address: "টাঙ্গাইল স্কুল",
-        lat: 24.2530,
         lng: 89.9180
       },
       {
-        name: "হাসপাতাল-১",
-        role: "নিকটস্থ হাসপাতাল",
-        phone: "০১৩২০-০০০০০০",
-        address: "টাঙ্গাইল হাসপাতাল",
-        lat: 24.2535,
-        lng: 89.9185
-      },
-      {
-        name: "ফায়ার স্টেশন-১",
-        role: "নিকটস্থ ফায়ার স্টেশন",
-        phone: "০১৩২০-০০০০০০",
-        address: "টাঙ্গাইল ফায়ার স্টেশন",
-        lat: 24.2540,
+        name: "টাঙ্গাইল বাস স্টেশন",
+        role: "বাস স্টেশন",
+        phone: "০১৭১২৩৪৫৬৭",
+        address: "টাঙ্গাইল বাস টার্মিনাল",
+        lat: 24.2530,
         lng: 89.9190
-      },
-      {
-        name: "বাস স্টেশন-১",
-        role: "নিকটস্থ বাস স্টেশন",
-        phone: "০১৩২০-০০০০০০",
-        address: "টাঙ্গাইল বাস স্টেশন",
-        lat: 24.2545,
-        lng: 89.9195
       }
     ];
 
@@ -319,200 +297,48 @@
         card.className = "result-card";
         card.innerHTML = `
           <h5>${person.name}</h5>
-          <p><strong>পদবি:</strong> ${person.role}</p>
-          <p><strong>ফোন:</strong> ${person.phone}</p>
-          <p><strong>ঠিকানা:</strong> ${person.address}</p>
-          <button class="btn btn-contact">যোগাযোগ করুন</button>
+          <p><strong>${person.role}</strong></p>
+          <p>${person.address}</p>
+          <a href="tel:${person.phone}" class="btn-contact">ফোন করুন</a>
         `;
         resultsDiv.appendChild(card);
       });
     });
 
-    function getDistance(lat1, lon1, lat2, lon2) {
-      const R = 6371;
-      const dLat = (lat2 - lat1) * Math.PI / 180;
-      const dLon = (lon2 - lon1) * Math.PI / 180;
-      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      return R * c;
+    function searchNearestDoctor() {
+      searchInput.value = "ডাক্তার";
+      searchInput.dispatchEvent(new Event("input"));
     }
 
     function searchByLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-
-          const nearby = courtPolice
-            .map(c => ({ ...c, distance: getDistance(userLat, userLng, c.lat, c.lng) }))
-            .sort((a, b) => a.distance - b.distance)
-            .slice(0, 3);
-
-          displayResults(nearby);
-        }, () => {
-          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
-        });
-      }
-    }
-
-    function searchNearestDoctor() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-
-          const nearby = doctors
-            .map(d => ({ ...d, distance: getDistance(userLat, userLng, d.lat, d.lng) }))
-            .sort((a, b) => a.distance - b.distance)
-            .slice(0, 3);
-
-          displayResults(nearby);
-        }, () => {
-          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
-        });
-      }
-    }
-
-    function searchNearestMosque() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-
-          const nearby = places
-            .filter(place => place.role.includes("মসজিদ"))
-            .map(place => ({ ...place, distance: getDistance(userLat, userLng, place.lat, place.lng) }))
-            .sort((a, b) => a.distance - b.distance)
-            .slice(0, 3);
-
-          displayResults(nearby);
-        }, () => {
-          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
-        });
-      }
+      searchInput.value = "পুলিশ";
+      searchInput.dispatchEvent(new Event("input"));
     }
 
     function searchNearestShop() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-
-          const nearby = places
-            .filter(place => place.role.includes("সুপারশপ"))
-            .map(place => ({ ...place, distance: getDistance(userLat, userLng, place.lat, place.lng) }))
-            .sort((a, b) => a.distance - b.distance)
-            .slice(0, 3);
-
-          displayResults(nearby);
-        }, () => {
-          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
-        });
-      }
+      searchInput.value = "সুপারশপ";
+      searchInput.dispatchEvent(new Event("input"));
     }
 
     function searchNearestSchool() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-
-          const nearby = places
-            .filter(place => place.role.includes("স্কুল"))
-            .map(place => ({ ...place, distance: getDistance(userLat, userLng, place.lat, place.lng) }))
-            .sort((a, b) => a.distance - b.distance)
-            .slice(0, 3);
-
-          displayResults(nearby);
-        }, () => {
-          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
-        });
-      }
+      searchInput.value = "স্কুল";
+      searchInput.dispatchEvent(new Event("input"));
     }
 
     function searchNearestHospital() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-
-          const nearby = places
-            .filter(place => place.role.includes("হাসপাতাল"))
-            .map(place => ({ ...place, distance: getDistance(userLat, userLng, place.lat, place.lng) }))
-            .sort((a, b) => a.distance - b.distance)
-            .slice(0, 3);
-
-          displayResults(nearby);
-        }, () => {
-          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
-        });
-      }
+      searchInput.value = "হাসপাতাল";
+      searchInput.dispatchEvent(new Event("input"));
     }
 
     function searchNearestFireStation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-
-          const nearby = places
-            .filter(place => place.role.includes("ফায়ার স্টেশন"))
-            .map(place => ({ ...place, distance: getDistance(userLat, userLng, place.lat, place.lng) }))
-            .sort((a, b) => a.distance - b.distance)
-            .slice(0, 3);
-
-          displayResults(nearby);
-        }, () => {
-          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
-        });
-      }
+      searchInput.value = "ফায়ার স্টেশন";
+      searchInput.dispatchEvent(new Event("input"));
     }
 
     function searchNearestBusStation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-
-          const nearby = places
-            .filter(place => place.role.includes("বাস স্টেশন"))
-            .map(place => ({ ...place, distance: getDistance(userLat, userLng, place.lat, place.lng) }))
-            .sort((a, b) => a.distance - b.distance)
-            .slice(0, 3);
-
-          displayResults(nearby);
-        }, () => {
-          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
-        });
-      }
-    }
-
-    function displayResults(results) {
-      resultsDiv.innerHTML = "";
-
-      if (results.length === 0) {
-        resultsDiv.innerHTML = '<p class="text-danger text-center mt-4">কোনো ফলাফল পাওয়া যায়নি।</p>';
-        return;
-      }
-
-      results.forEach((place) => {
-        const card = document.createElement("div");
-        card.className = "result-card";
-        card.innerHTML = `
-          <h5>${place.name}</h5>
-          <p><strong>পদবি:</strong> ${place.role}</p>
-          <p><strong>ফোন:</strong> ${place.phone}</p>
-          <p><strong>ঠিকানা:</strong> ${place.address}</p>
-          <button class="btn btn-contact">যোগাযোগ করুন</button>
-        `;
-        resultsDiv.appendChild(card);
-      });
+      searchInput.value = "বাস স্টেশন";
+      searchInput.dispatchEvent(new Event("input"));
     }
   </script>
-
-  <!-- Bootstrap JS & Popper.js -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
