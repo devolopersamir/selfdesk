@@ -1,234 +1,258 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>নাগরিক সার্চ ইঞ্জিন</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'SolaimanLipi', sans-serif;
-            background-color: #f0f8ff;
-            color: #333;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>নাগরিক সার্চ ইঞ্জিন</title>
 
-        h1 {
-            color: #ff6f00;
-            font-family: 'SolaimanLipi', sans-serif;
-            text-align: center;
-            margin-top: 30px;
-        }
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-        .header {
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
-        }
+  <!-- SolaimanLipi font -->
+  <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet" />
 
-        .container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 30px;
-        }
+  <style>
+    body {
+      font-family: 'SolaimanLipi', sans-serif;
+      background-color: #f2fdf2;
+    }
 
-        .btn-primary {
-            background-color: #28a745;
-            border: none;
-            padding: 12px 20px;
-            font-size: 18px;
-            border-radius: 5px;
-        }
+    .header {
+      background: linear-gradient(90deg, #006a4e 0%, #009e60 100%);
+      padding: 50px 0;
+      color: white;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
 
-        .btn-primary:hover {
-            background-color: #218838;
-        }
+    .header h1 {
+      font-size: 42px;
+      font-weight: bold;
+    }
 
-        .result-card {
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-top: 20px;
-            padding: 15px;
-        }
+    .search-bar {
+      max-width: 600px;
+      margin: 30px auto 10px;
+      padding: 15px 25px;
+      font-size: 18px;
+      border: 2px solid #006a4e;
+      border-radius: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
 
-        .result-card h5 {
-            color: #007bff;
-        }
+    .result-card {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
 
-        .result-card p {
-            color: #555;
-            font-size: 16px;
-        }
+    .result-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+    }
 
-        .result-card button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-        }
+    .result-card h5 {
+      color: #006a4e;
+      font-weight: bold;
+    }
 
-        .result-card button:hover {
-            background-color: #0056b3;
-        }
+    .btn-contact {
+      background-color: #d60000;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 5px;
+      font-size: 14px;
+      border: none;
+    }
 
-        .footer {
-            background-color: #007bff;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            margin-top: 30px;
-        }
-    </style>
+    .btn-contact:hover {
+      background-color: #a80000;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+      background-color: #f8f8f8;
+      margin-top: 50px;
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <h1>নাগরিক সার্চ ইঞ্জিন</h1>
-    </div>
-    <div class="container">
-        <button class="btn btn-primary" onclick="searchByLocation()">লোকেশন ভিত্তিক ডাক্তারের খোঁজ</button>
-        <div id="results" class="mt-4">
-            <!-- Doctor results will be displayed here -->
-        </div>
-        <div id="policeResults" class="mt-4">
-            <!-- Police results will be displayed here -->
-        </div>
-    </div>
 
-    <div class="footer">
-        <p>&copy; 2025 নাগরিক সার্চ ইঞ্জিন | সকল অধিকার সংরক্ষিত</p>
-    </div>
+  <!-- Header -->
+  <div class="header">
+    <h1>নাগরিক সার্চ ইঞ্জিন</h1>
+    <p class="lead">ডাক্তার, পুলিশ ও নাগরিক তথ্য খুঁজুন সহজেই</p>
+  </div>
 
-    <script>
-        const doctors = [
-            {
-                name: "ডাঃ মোঃ সাইফুল ইসলাম (স্বপন)",
-                qualification: "এমবিবিএস (ঢাকা), পিজিটি (সার্জারি, গাইনী)",
-                specialty: "সার্জন ও গাইনী চিকিৎসক",
-                visitingHours: "প্রতিদিন সকাল ৮টা - দুপুর ২টা, বিকেল ৫টা - রাত ৮টা",
-                phone: "01819132643",
-                chamber: "শামছুল হক মেমরিয়াল হসপিটাল",
-                lat: 24.2513,
-                lng: 89.9167
-            },
-            {
-                name: "ডাঃ মারজিয়া খানম",
-                qualification: "এমবিবিএস, বিসিএস (স্বাস্থ্য), এফসিপিএস (গাইনী অ্যান্ড অবস)",
-                specialty: "প্রসূতি ও স্ত্রীরোগ বিশেষজ্ঞ এবং সার্জন",
-                visitingHours: "প্রতি শুক্রবার সকাল ৯টা - বিকেল ৫টা",
-                phone: "01790336296, 01716206793, 01816081048",
-                chamber: "আল শেফা ক্লিনিক এন্ড নার্সিং হোম",
-                lat: 24.2513,
-                lng: 89.9167
-            },
-            {
-                name: "ডাঃ এম এম জালাল উদ্দিন",
-                qualification: "এমবিবিএস, এফসিপিএস",
-                specialty: "মনোরোগ, মনযৌন রোগ, মাদকাসক্ত ও ব্রেইন মেডিসিন বিশেষজ্ঞ",
-                visitingHours: "প্রতি শুক্রবার সকাল ৯টা - বিকেল ৫টা",
-                phone: "01718914242",
-                chamber: "টাঙ্গাইল ক্লিনিক এন্ড হসপিটাল",
-                lat: 24.2513,
-                lng: 89.9167
-            }
-        ];
+  <!-- Search Input -->
+  <div class="container">
+    <input type="text" class="form-control search-bar" id="searchInput" placeholder="যেমনঃ ডা. তাহমিনা, পুলিশ বা সার্কেল..." />
+    <button class="btn btn-success d-block mx-auto mt-2 mb-4" onclick="searchByLocation()">আমার কাছে কে আছেন?</button>
+    <div id="results" class="mt-4"></div>
+  </div>
 
-        const policeOfficers = [
-            {
-                name: "পুলিশ সুপার (এসপি), টাঙ্গাইল",
-                rank: "পুলিশ সুপার",
-                phone: "01712345678",
-                department: "টাঙ্গাইল জেলা পুলিশ",
-                office: "টাঙ্গাইল পুলিশ সদর দপ্তর",
-                lat: 24.2513,
-                lng: 89.9167
-            },
-            {
-                name: "অফিসার ইনচার্জ (ওসি), টাঙ্গাইল",
-                rank: "অফিসার ইনচার্জ",
-                phone: "01787654321",
-                department: "টাঙ্গাইল থানা",
-                office: "টাঙ্গাইল থানা",
-                lat: 24.2513,
-                lng: 89.9167
-            }
-        ];
+  <!-- Footer -->
+  <footer>
+    &copy; ২০২৫ নাগরিক সার্ভিস | ডিজাইন করেছে সমীর
+  </footer>
 
-        function searchByLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    const userLat = position.coords.latitude;
-                    const userLng = position.coords.longitude;
+  <!-- Script -->
+  <script>
+    const courtPolice = [
+      {
+        name: "জনাব মোঃ আবুল কালাম",
+        role: "চিফ জুডিশিয়াল ম্যাজিস্ট্রেট",
+        phone: "০১৩২০-০৯৬৩২০",
+        address: "টাঙ্গাইল জেলা আদালত",
+        lat: 24.2513,
+        lng: 89.9167
+      },
+      {
+        name: "মোঃ আলমগীর হোসেন",
+        role: "আদালত কর্মচারী",
+        phone: "০১৩২০-০৯৬৩২৪",
+        address: "টাঙ্গাইল জেলা আদালত",
+        lat: 24.2513,
+        lng: 89.9167
+      },
+      {
+        name: "রুহুল আমিন",
+        role: "পুলিশ অফিসার, আদালত",
+        phone: "০১৩২০-০৯৬৩২৫",
+        address: "টাঙ্গাইল জেলা আদালত",
+        lat: 24.2513,
+        lng: 89.9167
+      },
+      {
+        name: "সালেহা বেগম",
+        role: "পুলিশ অফিসার, আদালত",
+        phone: "০১৩২০-০৯৬৩৩০",
+        address: "টাঙ্গাইল জেলা আদালত",
+        lat: 24.2513,
+        lng: 89.9167
+      }
+    ];
 
-                    const nearbyDoctors = doctors
-                        .map(doctor => {
-                            const distance = getDistance(userLat, userLng, doctor.lat, doctor.lng);
-                            return { ...doctor, distance };
-                        })
-                        .sort((a, b) => a.distance - b.distance)
-                        .slice(0, 3);
+    const doctors = [
+      {
+        name: "ডা. সেলিম সিদ্দিকী",
+        specialization: "চিকিৎসক",
+        phone: "০১৯১২-৩৪৫৬৭৮",
+        address: "টাঙ্গাইল শহর",
+        lat: 24.2513,
+        lng: 89.9167
+      },
+      {
+        name: "ডা. তাহমিনা আক্তার",
+        specialization: "গাইনী",
+        phone: "০১৯১২-৩৪৫৬৭৯",
+        address: "টাঙ্গাইল জেলা হাসপাতাল",
+        lat: 24.2515,
+        lng: 89.9169
+      },
+      {
+        name: "ডা. ফারুক হোসেন",
+        specialization: "ডেন্টিস্ট",
+        phone: "০১৯১২-৩৪৫৬৮০",
+        address: "টাঙ্গাইল মেডিকেল সেন্টার",
+        lat: 24.2512,
+        lng: 89.9170
+      }
+    ];
 
-                    displayDoctors(nearbyDoctors);
-                }, () => {
-                    alert("লোকেশন অনুমতি দেওয়া হয়নি।");
-                });
-            } else {
-                alert("আপনার ব্রাউজার লোকেশন সাপোর্ট করে না।");
-            }
-        }
+    const searchInput = document.getElementById("searchInput");
+    const resultsDiv = document.getElementById("results");
 
-        function getDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; 
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                      Math.sin(dLon/2) * Math.sin(dLon/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return R * c;
-        }
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase();
+      resultsDiv.innerHTML = "";
 
-        function displayDoctors(doctors) {
-            const resultsDiv = document.getElementById("results");
-            resultsDiv.innerHTML = "";
+      const filteredCourtPolice = courtPolice.filter((person) =>
+        person.name.toLowerCase().includes(query) ||
+        person.role.toLowerCase().includes(query) ||
+        person.address.toLowerCase().includes(query)
+      );
 
-            doctors.forEach(doctor => {
-                const card = document.createElement("div");
-                card.className = "result-card";
-                card.innerHTML = `
-                    <h5>${doctor.name}</h5>
-                    <p><strong>পদবি:</strong> ${doctor.specialty}</p>
-                    <p><strong>ফোন:</strong> ${doctor.phone}</p>
-                    <p><strong>ঠিকানা:</strong> ${doctor.chamber}</p>
-                    <p><strong>দূরত্ব:</strong> ${doctor.distance.toFixed(2)} কিমি</p>
-                    <button class="btn btn-primary">যোগাযোগ করুন</button>
-                `;
-                resultsDiv.appendChild(card);
-            });
-        }
+      const filteredDoctors = doctors.filter((doctor) =>
+        doctor.name.toLowerCase().includes(query) ||
+        doctor.specialization.toLowerCase().includes(query) ||
+        doctor.address.toLowerCase().includes(query)
+      );
 
-        function displayPoliceOfficers(policeOfficers) {
-            const policeResultsDiv = document.getElementById("policeResults");
-            policeResultsDiv.innerHTML = "";
+      const filteredResults = [...filteredCourtPolice, ...filteredDoctors];
 
-            policeOfficers.forEach(officer => {
-                const card = document.createElement("div");
-                card.className = "result-card";
-                card.innerHTML = `
-                    <h5>${officer.name}</h5>
-                    <p><strong>পদবি:</strong> ${officer.rank}</p>
-                    <p><strong>ফোন:</strong> ${officer.phone}</p>
-                    <p><strong>বিভাগ:</strong> ${officer.department}</p>
-                    <p><strong>অফিস:</strong> ${officer.office}</p>
-                    <button class="btn btn-primary">যোগাযোগ করুন</button>
-                `;
-                policeResultsDiv.appendChild(card);
-            });
-        }
+      if (filteredResults.length === 0) {
+        resultsDiv.innerHTML = '<p class="text-danger text-center mt-4">কোনো ফলাফল পাওয়া যায়নি।</p>';
+        return;
+      }
 
-        displayPoliceOfficers(policeOfficers);
-    </script>
+      filteredResults.forEach((person) => {
+        const card = document.createElement("div");
+        card.className = "result-card";
+        card.innerHTML = `
+          <h5>${person.name}</h5>
+          <p><strong>পদবি/বিশেষজ্ঞতা:</strong> ${person.role || person.specialization}</p>
+          <p><strong>ফোন:</strong> ${person.phone}</p>
+          <p><strong>ঠিকানা:</strong> ${person.address}</p>
+          <button class="btn btn-contact">যোগাযোগ করুন</button>
+        `;
+        resultsDiv.appendChild(card);
+      });
+    });
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    function searchByLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+
+          const nearby = [...courtPolice, ...doctors]
+            .map(c => {
+              const dist = getDistance(userLat, userLng, c.lat, c.lng);
+              return {...c, distance: dist};
+            })
+            .sort((a, b) => a.distance - b.distance)
+            .slice(0, 3);
+
+          resultsDiv.innerHTML = '';
+          nearby.forEach(person => {
+            const card = document.createElement("div");
+            card.className = "result-card";
+            card.innerHTML = `
+              <h5>${person.name}</h5>
+              <p><strong>পদবি/বিশেষজ্ঞতা:</strong> ${person.role || person.specialization}</p>
+              <p><strong>ফোন:</strong> ${person.phone}</p>
+              <p><strong>ঠিকানা:</strong> ${person.address}</p>
+              <p><strong>দূরত্ব:</strong> ${person.distance.toFixed(2)} কিমি</p>
+              <button class="btn btn-contact">যোগাযোগ করুন</button>
+            `;
+            resultsDiv.appendChild(card);
+          });
+
+        }, () => {
+          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
+        });
+      } else {
+        alert("আপনার ব্রাউজার লোকেশন সাপোর্ট করে না।");
+      }
+    }
+  </script>
+
 </body>
 </html>
