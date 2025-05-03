@@ -114,6 +114,13 @@
       background-color: #f8f8f8;
       margin-top: 50px;
     }
+
+    #map {
+      height: 400px;
+      margin-top: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
   </style>
 </head>
 <body>
@@ -140,6 +147,9 @@
     </div>
 
     <div id="results" class="mt-4"></div>
+
+    <!-- Map -->
+    <div id="map"></div>
   </div>
 
   <!-- Footer -->
@@ -244,6 +254,7 @@
             .slice(0, 3);
 
           displayResults(nearby);
+          showMap(userLat, userLng, nearby);
         }, () => {
           alert("লোকেশন অনুমতি দেওয়া হয়নি।");
         });
@@ -262,6 +273,7 @@
             .slice(0, 3);
 
           displayResults(nearby);
+          showMap(userLat, userLng, nearby);
         }, () => {
           alert("লোকেশন অনুমতি দেওয়া হয়নি।");
         });
@@ -277,14 +289,4 @@
           <h5>${item.name}</h5>
           <p><strong>পদবি:</strong> ${item.role}</p>
           <p><strong>ফোন:</strong> ${item.phone}</p>
-          <p><strong>ঠিকানা:</strong> ${item.address}</p>
-          <p><strong>দূরত্ব:</strong> ${item.distance.toFixed(2)} কিমি</p>
-          <button class="btn btn-contact">যোগাযোগ করুন</button>
-        `;
-        resultsDiv.appendChild(card);
-      });
-    }
-  </script>
-
-</body>
-</html>
+          <p><strong>ঠিকানা:</strong> ${item.address
