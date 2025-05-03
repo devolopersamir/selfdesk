@@ -99,7 +99,7 @@
 
     .doctor-btn:hover {
       transform: scale(1.1);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
 
     .btn-label {
@@ -144,6 +144,15 @@
       footer {
         font-size: 14px;
       }
+    }
+
+    /* Styling for the circular 'Detecter' button */
+    .btn-primary {
+      border-radius: 50%;
+      padding: 15px 25px;
+      font-size: 18px;
+      text-align: center;
+      display: inline-block;
     }
   </style>
 </head>
@@ -258,108 +267,6 @@
           <p>ভূমিকা: ${police.role}</p>
           <p>ফোন: ${police.phone}</p>
           <p>ঠিকানা: ${police.address}</p>
-        `;
-        resultsDiv.appendChild(resultCard);
-      });
-    }
-
-    // Function to search nearest mosque
-    function searchNearestMosque() {
-      let resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = '';  // Clear previous results
-      places.forEach(place => {
-        let resultCard = document.createElement('div');
-        resultCard.classList.add('result-card');
-        resultCard.innerHTML = `
-          <h5>${place.name}</h5>
-          <p>ভূমিকা: ${place.role}</p>
-          <p>ফোন: ${place.phone}</p>
-          <p>ঠিকানা: ${place.address}</p>
-        `;
-        resultsDiv.appendChild(resultCard);
-      });
-    }
-
-    // Function to search nearest shop
-    function searchNearestShop() {
-      let resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = '';  // Clear previous results
-      places.forEach(place => {
-        let resultCard = document.createElement('div');
-        resultCard.classList.add('result-card');
-        resultCard.innerHTML = `
-          <h5>${place.name}</h5>
-          <p>ভূমিকা: ${place.role}</p>
-          <p>ফোন: ${place.phone}</p>
-          <p>ঠিকানা: ${place.address}</p>
-        `;
-        resultsDiv.appendChild(resultCard);
-      });
-    }
-
-    // Function to search nearest school
-    function searchNearestSchool() {
-      let resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = '';  // Clear previous results
-      places.forEach(place => {
-        let resultCard = document.createElement('div');
-        resultCard.classList.add('result-card');
-        resultCard.innerHTML = `
-          <h5>${place.name}</h5>
-          <p>ভূমিকা: ${place.role}</p>
-          <p>ফোন: ${place.phone}</p>
-          <p>ঠিকানা: ${place.address}</p>
-        `;
-        resultsDiv.appendChild(resultCard);
-      });
-    }
-
-    // Function to search nearest hospital
-    function searchNearestHospital() {
-      let resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = '';  // Clear previous results
-      places.forEach(place => {
-        let resultCard = document.createElement('div');
-        resultCard.classList.add('result-card');
-        resultCard.innerHTML = `
-          <h5>${place.name}</h5>
-          <p>ভূমিকা: ${place.role}</p>
-          <p>ফোন: ${place.phone}</p>
-          <p>ঠিকানা: ${place.address}</p>
-        `;
-        resultsDiv.appendChild(resultCard);
-      });
-    }
-
-    // Function to search nearest fire station
-    function searchNearestFireStation() {
-      let resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = '';  // Clear previous results
-      places.forEach(place => {
-        let resultCard = document.createElement('div');
-        resultCard.classList.add('result-card');
-        resultCard.innerHTML = `
-          <h5>${place.name}</h5>
-          <p>ভূমিকা: ${place.role}</p>
-          <p>ফোন: ${place.phone}</p>
-          <p>ঠিকানা: ${place.address}</p>
-        `;
-        resultsDiv.appendChild(resultCard);
-      });
-    }
-
-    // Function to search nearest bus station
-    function searchNearestBusStation() {
-      let resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = '';  // Clear previous results
-      places.forEach(place => {
-        let resultCard = document.createElement('div');
-        resultCard.classList.add('result-card');
-        resultCard.innerHTML = `
-          <h5>${place.name}</h5>
-          <p>ভূমিকা: ${place.role}</p>
-          <p>ফোন: ${place.phone}</p>
-          <p>ঠিকানা: ${place.address}</p>
         `;
         resultsDiv.appendChild(resultCard);
       });
