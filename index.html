@@ -8,6 +8,9 @@
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <!-- SolaimanLipi font -->
   <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet" />
 
@@ -38,6 +41,26 @@
       border: 2px solid #006a4e;
       border-radius: 30px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .doctor-btn {
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      background-color: #007bff;
+      color: white;
+      border: none;
+      transition: transform 0.2s, background-color 0.3s;
+    }
+
+    .doctor-btn:hover {
+      transform: scale(1.1);
+      background-color: #0056b3;
     }
 
     .result-card {
@@ -92,8 +115,12 @@
   <!-- Search Input -->
   <div class="container">
     <input type="text" class="form-control search-bar" id="searchInput" placeholder="যেমনঃ ডা. তাহমিনা, পুলিশ বা সার্কেল..." />
-    <button class="btn btn-success d-block mx-auto mt-2 mb-4" onclick="searchByLocation()">আমার কাছে কে আছেন?</button>
-    <button class="btn btn-primary d-block mx-auto mt-2 mb-4" onclick="showNearbyDoctors()">নিকটস্থ ডক্টর</button>
+    
+    <!-- Doctor Button with Icon -->
+    <button class="doctor-btn mx-auto mb-4" onclick="showNearbyDoctors()" title="নিকটস্থ ডাক্তার দেখুন">
+      <i class="fas fa-user-md"></i>
+    </button>
+
     <div id="results" class="mt-4"></div>
   </div>
 
@@ -104,34 +131,93 @@
 
   <!-- Script -->
   <script>
-    const doctors = [
+    const courtPolice = [
       {
-        name: "ডা. তাহমিনা",
-        role: "চিকিৎসক",
-        phone: "০১৩২০-০৯৬৩২০",
-        address: "টাঙ্গাইল হাসপাতাল",
+        name: "রুহুল আমিন",
+        role: "পুলিশ অফিসার, আদালত",
+        phone: "০১৩২০-০৯৬৩২৫",
+        address: "টাঙ্গাইল জেলা আদালত",
         lat: 24.2513,
         lng: 89.9167
-      },
-      {
-        name: "ডা. সোহেল",
-        role: "চিকিৎসক",
-        phone: "০১৩২০-০৯৬৩৩০",
-        address: "টাঙ্গাইল হাসপাতাল",
-        lat: 24.2578,
-        lng: 89.9077
-      },
-      {
-        name: "ডা. রাহুল",
-        role: "চিকিৎসক",
-        phone: "০১৩২০-০৯৬৩৩৫",
-        address: "টাঙ্গাইল হাসপাতাল",
-        lat: 24.2420,
-        lng: 89.9120
       }
     ];
 
+    const nearbyDoctors = [
+      {
+        name: "ডা. তাহমিনা আক্তার",
+        role: "মেডিসিন বিশেষজ্ঞ",
+        phone: "০১৭১১-১২৩৪৫৬",
+        address: "টাঙ্গাইল মেডিকেল",
+        lat: 24.2515,
+        lng: 89.9170
+      },
+      {
+        name: "ডা. আজিজুর রহমান",
+        role: "চর্ম ও যৌন রোগ বিশেষজ্ঞ",
+        phone: "০১৭১৬-৭৮৯৪৫৬",
+        address: "মদিনা মেডিকেল সেন্টার",
+        lat: 24.2518,
+        lng: 89.9165
+      }
+    ];
+
+    const searchInput = document.getElementById("searchInput");
     const resultsDiv = document.getElementById("results");
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase();
+      resultsDiv.innerHTML = "";
+
+      const filtered = courtPolice.concat(nearbyDoctors).filter((person) =>
+        person.name.toLowerCase().includes(query) ||
+        person.role.toLowerCase().includes(query) ||
+        person.address.toLowerCase().includes(query)
+      );
+
+      if (filtered.length === 0) {
+        resultsDiv.innerHTML = '<p class="text-danger text-center mt-4">কোনো ফলাফল পাওয়া যায়নি।</p>';
+        return;
+      }
+
+      filtered.forEach((person) => {
+        showCard(person);
+      });
+    });
+
+    function showNearbyDoctors() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+
+          const nearby = nearbyDoctors.map(doc => {
+            const dist = getDistance(userLat, userLng, doc.lat, doc.lng);
+            return {...doc, distance: dist};
+          }).sort((a, b) => a.distance - b.distance).slice(0, 3);
+
+          resultsDiv.innerHTML = '';
+          nearby.forEach(person => showCard(person, true));
+        }, () => {
+          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
+        });
+      } else {
+        alert("আপনার ব্রাউজার লোকেশন সাপোর্ট করে না।");
+      }
+    }
+
+    function showCard(person, showDistance = false) {
+      const card = document.createElement("div");
+      card.className = "result-card";
+      card.innerHTML = `
+        <h5>${person.name}</h5>
+        <p><strong>পদবি:</strong> ${person.role}</p>
+        <p><strong>ফোন:</strong> ${person.phone}</p>
+        <p><strong>ঠিকানা:</strong> ${person.address}</p>
+        ${showDistance && person.distance ? `<p><strong>দূরত্ব:</strong> ${person.distance.toFixed(2)} কিমি</p>` : ""}
+        <button class="btn btn-contact">যোগাযোগ করুন</button>
+      `;
+      resultsDiv.appendChild(card);
+    }
 
     function getDistance(lat1, lon1, lat2, lon2) {
       const R = 6371;
@@ -143,43 +229,6 @@
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
       return R * c;
     }
-
-    function showNearbyDoctors() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-
-          const nearbyDoctors = doctors
-            .map(d => {
-              const dist = getDistance(userLat, userLng, d.lat, d.lng);
-              return {...d, distance: dist};
-            })
-            .sort((a, b) => a.distance - b.distance)
-            .slice(0, 3);
-
-          resultsDiv.innerHTML = '';
-          nearbyDoctors.forEach(doctor => {
-            const card = document.createElement("div");
-            card.className = "result-card";
-            card.innerHTML = `
-              <h5>${doctor.name}</h5>
-              <p><strong>পদবি:</strong> ${doctor.role}</p>
-              <p><strong>ফোন:</strong> ${doctor.phone}</p>
-              <p><strong>ঠিকানা:</strong> ${doctor.address}</p>
-              <p><strong>দূরত্ব:</strong> ${doctor.distance.toFixed(2)} কিমি</p>
-              <button class="btn btn-contact">যোগাযোগ করুন</button>
-            `;
-            resultsDiv.appendChild(card);
-          });
-        }, () => {
-          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
-        });
-      } else {
-        alert("আপনার ব্রাউজার লোকেশন সাপোর্ট করে না।");
-      }
-    }
   </script>
-
 </body>
 </html>
