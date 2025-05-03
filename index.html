@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>নাগরিক সার্চ ইঞ্জিন</title>
 
-  <!-- Bootstrap 5 -->
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-  <!-- SolaimanLipi from Maateen CDN -->
+  <!-- SolaimanLipi font -->
   <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet" />
 
-  <!-- Custom Styles -->
   <style>
     body {
       font-family: 'SolaimanLipi', sans-serif;
@@ -33,7 +32,7 @@
 
     .search-bar {
       max-width: 600px;
-      margin: 30px auto;
+      margin: 30px auto 10px;
       padding: 15px 25px;
       font-size: 18px;
       border: 2px solid #006a4e;
@@ -90,9 +89,10 @@
     <p class="lead">ডাক্তার, পুলিশ ও নাগরিক তথ্য খুঁজুন সহজেই</p>
   </div>
 
-  <!-- Search Section -->
+  <!-- Search Input -->
   <div class="container">
     <input type="text" class="form-control search-bar" id="searchInput" placeholder="যেমনঃ ডা. তাহমিনা, পুলিশ বা হাসপাতাল..." />
+    <button class="btn btn-success d-block mx-auto mt-2 mb-4" onclick="searchByLocation()">আমার কাছে কে আছে?</button>
     <div id="results" class="mt-4"></div>
   </div>
 
@@ -108,25 +108,33 @@
         name: "ডা. তাহমিনা রহমান",
         role: "ডাক্তার",
         phone: "01712345678",
-        address: "সিলেট সদর হাসপাতাল"
+        address: "সিলেট সদর হাসপাতাল",
+        lat: 24.8949,
+        lng: 91.8687
       },
       {
         name: "এসআই কামরুল ইসলাম",
         role: "পুলিশ",
         phone: "01898765432",
-        address: "রাজশাহী মেট্রোপলিটন থানা"
+        address: "রাজশাহী মেট্রোপলিটন থানা",
+        lat: 24.3636,
+        lng: 88.6241
       },
       {
         name: "ডা. শামসুর নাহার",
         role: "ডাক্তার",
         phone: "01511223344",
-        address: "মুগদা মেডিকেল কলেজ, ঢাকা"
+        address: "মুগদা মেডিকেল কলেজ, ঢাকা",
+        lat: 23.7362,
+        lng: 90.4390
       },
       {
         name: "এসআই মাহমুদ হোসেন",
         role: "পুলিশ",
         phone: "01999887766",
-        address: "চট্টগ্রাম জেলা পুলিশ"
+        address: "চট্টগ্রাম জেলা পুলিশ",
+        lat: 22.3569,
+        lng: 91.7832
       }
     ];
 
@@ -161,6 +169,54 @@
         resultsDiv.appendChild(card);
       });
     });
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    function searchByLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+
+          const nearby = citizens
+            .map(c => {
+              const dist = getDistance(userLat, userLng, c.lat, c.lng);
+              return {...c, distance: dist};
+            })
+            .sort((a, b) => a.distance - b.distance)
+            .slice(0, 3);
+
+          resultsDiv.innerHTML = '';
+          nearby.forEach(person => {
+            const card = document.createElement("div");
+            card.className = "result-card";
+            card.innerHTML = `
+              <h5>${person.name}</h5>
+              <p><strong>পেশা:</strong> ${person.role}</p>
+              <p><strong>ফোন:</strong> ${person.phone}</p>
+              <p><strong>ঠিকানা:</strong> ${person.address}</p>
+              <p><strong>দূরত্ব:</strong> ${person.distance.toFixed(2)} কিমি</p>
+              <button class="btn btn-contact">যোগাযোগ করুন</button>
+            `;
+            resultsDiv.appendChild(card);
+          });
+
+        }, () => {
+          alert("লোকেশন অনুমতি দেওয়া হয়নি।");
+        });
+      } else {
+        alert("আপনার ব্রাউজার লোকেশন সাপোর্ট করে না।");
+      }
+    }
   </script>
 
 </body>
