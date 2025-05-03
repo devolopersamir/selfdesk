@@ -315,6 +315,7 @@
       resultsDiv.innerHTML = bkashAgentInfo;
     }
 
+    // Function
     // Function to search nearest pharmacy
     function searchNearestPharmacy() {
       let resultsDiv = document.getElementById('results');
@@ -335,7 +336,7 @@
       const roadConditionInfo = `
         <div class="result-card">
           <h5>রাস্তার অবস্থা</h5>
-          <p>আপনার এলাকার রাস্তার অবস্থা জানুন।</p>
+          <p>আপনার কাছের রাস্তার অবস্থা দেখুন।</p>
         </div>
       `;
       resultsDiv.innerHTML = roadConditionInfo;
@@ -348,28 +349,162 @@
       const weatherInfo = `
         <div class="result-card">
           <h5>আবাহাওয়া</h5>
-          <p>আপনার অবস্থানে বর্তমান আবাহাওয়া জানুন।</p>
+          <p>আপনার অবস্থান অনুযায়ী আবহাওয়ার তথ্য জানুন।</p>
         </div>
       `;
       resultsDiv.innerHTML = weatherInfo;
     }
 
-    // Function to search nearest doctor
+    // Function to search nearest petrol pump
+    function searchNearestPetrolPump() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const petrolPumpInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ পেট্রল পাম্প</h5>
+          <p>আপনার কাছাকাছি পেট্রল পাম্প খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = petrolPumpInfo;
+    }
+
+    // Function to search nearest registration office
+    function searchNearestRegistration() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const registrationInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ রেজিস্ট্রেশন অফিস</h5>
+          <p>আপনার কাছাকাছি রেজিস্ট্রেশন অফিস খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = registrationInfo;
+    }
+
+    // Function to search nearest market
+    function searchNearestMarket() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const marketInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ বাজার</h5>
+          <p>আপনার কাছাকাছি বাজার খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = marketInfo;
+    }
+
+    // Function to handle emergency alert
+    function emergencyAlert() {
+      alert('আপনার জরুরি অবস্থার জন্য সতর্কতা পাঠানো হয়েছে!');
+    }
+
+    // Function to handle nearest doctor search
     function searchNearestDoctor() {
       let resultsDiv = document.getElementById('results');
       resultsDiv.innerHTML = '';  // Clear previous results
-      // Add doctor data or function to display doctor search results
+      const doctorInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ ডাক্তার</h5>
+          <p>আপনার কাছে নিকটস্থ ডাক্তার খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = doctorInfo;
     }
 
-    // Function to search by location (Court Police)
+    // Function to search by location (Police, Fire Station, etc.)
     function searchByLocation() {
       let resultsDiv = document.getElementById('results');
       resultsDiv.innerHTML = '';  // Clear previous results
-      // Add police or location search logic here
+      const locationInfo = `
+        <div class="result-card">
+          <h5>লোকেশন অনুসারে তথ্য</h5>
+          <p>আপনার অবস্থানের ভিত্তিতে পুলিস, ফায়ার স্টেশন, ইত্যাদি খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = locationInfo;
+    }
+
+    // Function to search nearest mosque
+    function searchNearestMosque() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const mosqueInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ মসজিদ</h5>
+          <p>আপনার কাছাকাছি মসজিদ খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = mosqueInfo;
+    }
+
+    // Function to search nearest shop
+    function searchNearestShop() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const shopInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ সুপারশপ</h5>
+          <p>আপনার কাছাকাছি সুপারশপ খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = shopInfo;
+    }
+
+    // Function to search nearest school
+    function searchNearestSchool() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const schoolInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ স্কুল</h5>
+          <p>আপনার কাছাকাছি স্কুল খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = schoolInfo;
+    }
+
+    // Function to search nearest hospital
+    function searchNearestHospital() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const hospitalInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ হাসপাতাল</h5>
+          <p>আপনার কাছাকাছি হাসপাতাল খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = hospitalInfo;
+    }
+
+    // Function to search nearest fire station
+    function searchNearestFireStation() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const fireStationInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ ফায়ার স্টেশন</h5>
+          <p>আপনার কাছাকাছি ফায়ার স্টেশন খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = fireStationInfo;
+    }
+
+    // Function to search nearest bus station
+    function searchNearestBusStation() {
+      let resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';  // Clear previous results
+      const busStationInfo = `
+        <div class="result-card">
+          <h5>নিকটস্থ বাস স্টেশন</h5>
+          <p>আপনার কাছাকাছি বাস স্টেশন খুঁজুন।</p>
+        </div>
+      `;
+      resultsDiv.innerHTML = busStationInfo;
     }
   </script>
-
-  <!-- Bootstrap and jQuery JS -->
+  
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
